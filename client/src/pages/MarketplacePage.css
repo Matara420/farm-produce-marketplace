@@ -1,0 +1,44 @@
+.marketplace-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.dark-mode .marketplace-page {
+  background-color: #121212;
+}
+
+.marketplace-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.marketplace-container h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.dark-mode .marketplace-container h1 {
+  color: #e0e0e0;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.no-products {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  font-size: 1.2rem;
+  grid-column: 1 / -1;
+}
+
+.dark-mode .no-products {
+  color: #ccc;
+}
