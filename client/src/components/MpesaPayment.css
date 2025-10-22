@@ -1,0 +1,304 @@
+.mpesa-payment {
+    border: 2px solid #00A650;
+    border-radius: 16px;
+    padding: 24px;
+    margin: 20px 0;
+    background: linear-gradient(135deg, #f8fff8 0%, #ffffff 100%);
+    box-shadow: 0 8px 32px rgba(0, 166, 80, 0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .mpesa-payment::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #00A650, #008C42, #00A650);
+  }
+  
+  .dark-mode .mpesa-payment {
+    background: linear-gradient(135deg, #1a2a1a 0%, #2a2a2a 100%);
+    border-color: #00C853;
+    box-shadow: 0 8px 32px rgba(0, 200, 83, 0.15);
+  }
+  
+  .mpesa-header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e8f5e8;
+    position: relative;
+  }
+  
+  .dark-mode .mpesa-header {
+    border-bottom-color: #2a3a2a;
+  }
+  
+  .mpesa-logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00A650;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 4px rgba(0, 166, 80, 0.3);
+  }
+  
+  .mpesa-header h3 {
+    margin: 0;
+    color: #2d3748;
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+  
+  .dark-mode .mpesa-header h3 {
+    color: #e2e8f0;
+  }
+  
+  /* Input Sections */
+  .mpesa-input-section,
+  .mpesa-confirm-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .input-group {
+    margin-bottom: 8px;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.95rem;
+  }
+  
+  .dark-mode .input-group label {
+    color: #e2e8f0;
+  }
+  
+  .phone-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    background: white;
+    color: #2d3748;
+    font-weight: 500;
+  }
+  
+  .phone-input:focus {
+    outline: none;
+    border-color: #00A650;
+    box-shadow: 0 0 0 3px rgba(0, 166, 80, 0.1);
+    transform: translateY(-1px);
+  }
+  
+  .dark-mode .phone-input {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .dark-mode .phone-input:focus {
+    border-color: #00C853;
+    box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.1);
+  }
+  
+  /* Payment Details */
+  .payment-details {
+    background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+    border: 1px solid #c6f6d5;
+  }
+  
+  .dark-mode .payment-details {
+    background: linear-gradient(135deg, #1a3a2a 0%, #1a2a3a 100%);
+    border-color: #2d7a5c;
+  }
+  
+  .payment-details p {
+    margin: 12px 0;
+    color: #2d3748;
+    font-size: 1.05rem;
+  }
+  
+  .dark-mode .payment-details p {
+    color: #e2e8f0;
+  }
+  
+  .payment-details strong {
+    color: #00A650;
+    font-weight: 600;
+  }
+  
+  .dark-mode .payment-details strong {
+    color: #00C853;
+  }
+  
+  .instruction {
+    font-size: 0.9rem;
+    color: #718096;
+    font-style: italic;
+    margin-top: 16px !important;
+    padding: 12px;
+    background: rgba(0, 166, 80, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid #00A650;
+  }
+  
+  .dark-mode .instruction {
+    color: #a0aec0;
+    background: rgba(0, 200, 83, 0.1);
+    border-left-color: #00C853;
+  }
+  
+  /* Buttons */
+  .mpesa-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .mpesa-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .mpesa-btn:hover::before {
+    left: 100%;
+  }
+  
+  .continue-btn, .confirm-btn {
+    background: linear-gradient(135deg, #00A650 0%, #008C42 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 166, 80, 0.3);
+  }
+  
+  .continue-btn:hover:not(:disabled), .confirm-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #008C42 0%, #007A38 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 166, 80, 0.4);
+  }
+  
+  .continue-btn:disabled, .confirm-btn:disabled {
+    background: #cbd5e0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .dark-mode .continue-btn:disabled, .dark-mode .confirm-btn:disabled {
+    background: #4a5568;
+  }
+  
+  .back-btn {
+    background: transparent;
+    color: #718096;
+    border: 2px solid #e2e8f0;
+    font-weight: 500;
+  }
+  
+  .back-btn:hover {
+    background: #f7fafc;
+    border-color: #cbd5e0;
+    color: #4a5568;
+  }
+  
+  .dark-mode .back-btn {
+    color: #a0aec0;
+    border-color: #4a5568;
+  }
+  
+  .dark-mode .back-btn:hover {
+    background: #2d3748;
+    border-color: #718096;
+    color: #e2e8f0;
+  }
+  
+  /* Success State */
+  .mpesa-success {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
+    border-radius: 16px;
+    border: 2px solid #00A650;
+  }
+  
+  .dark-mode .mpesa-success {
+    background: linear-gradient(135deg, #1a3a2a 0%, #2a2a2a 100%);
+    border-color: #00C853;
+  }
+  
+  .success-icon {
+    font-size: 4rem;
+    color: #00A650;
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+  }
+  
+  @keyframes bounce {
+    0%, 20%, 60%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    80% { transform: translateY(-5px); }
+  }
+  
+  .mpesa-success h3 {
+    color: #00A650;
+    margin-bottom: 16px;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .mpesa-success p {
+    margin: 8px 0;
+    color: #4a5568;
+    font-size: 1rem;
+  }
+  
+  .dark-mode .mpesa-success p {
+    color: #a0aec0;
+  }
+  
+  /* Loading Animation */
+  .mpesa-btn:disabled::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

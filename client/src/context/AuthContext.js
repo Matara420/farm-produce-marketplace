@@ -13,8 +13,11 @@ export const AuthProvider = ({ children }) => {
     const savedUser = localStorage.getItem('user');
     return savedUser ? JSON.parse(savedUser).role : null;
   });
-  const [userProducts, setUserProducts] = useState([]); // Products added by the current user
-  const [orderHistory, setOrderHistory] = useState([]); // Order history for buyers
+  
+  // Shared products that all users can see
+  const [allProducts, setAllProducts] = useState([]);
+  const [userProducts, setUserProducts] = useState([]);
+  const [orderHistory, setOrderHistory] = useState([]);
 
   const login = (userData) => {
     setUser(userData);
@@ -26,11 +29,11 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setRole(null);
     setUserProducts([]);
+    setOrderHistory([]);
     localStorage.removeItem('user');
   };
 
   const signup = (userData) => {
-    // Mock signup, in real app call API
     login(userData);
   };
 
@@ -42,6 +45,7 @@ export const AuthProvider = ({ children }) => {
       farmerId: user.id
     };
     setUserProducts(prev => [...prev, newProduct]);
+    setAllProducts(prev => [...prev, newProduct]); // Add to shared products
   };
 
   const addOrder = (cartItems, totalPrice) => {
@@ -56,7 +60,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, userProducts, orderHistory, login, logout, signup, addProduct, addOrder }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      role, 
+      userProducts, 
+      allProducts, // Add this
+      orderHistory, 
+      login, 
+      logout, 
+      signup, 
+      addProduct, 
+      addOrder 
+    }}>
       {children}
     </AuthContext.Provider>
   );

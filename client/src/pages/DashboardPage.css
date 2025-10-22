@@ -164,6 +164,246 @@
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #4CAF50;
+  .earnings-stats,
+  .spending-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .stat-card {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark-mode .stat-card {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+  }
+  
+  .stat-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    opacity: 0.9;
+  }
+  
+  .earnings-amount,
+  .spent-amount {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .orders-count,
+  .products-count {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .favorite-category {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .recent-orders {
+    margin-top: 2rem;
+  }
+  
+  .orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .order-item-mini {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: #f5f5f5;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  
+  .dark-mode .order-item-mini {
+    background: #333;
+  }
+  
+  .order-item-mini span {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .spending-stats .stat-card {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+  }
+  
+  .dark-mode .spending-stats .stat-card {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+  }
+  
+  .profile-info p {
+    margin: 0.5rem 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .dark-mode .profile-info p {
+    border-bottom-color: #555;
+  }
+  
+  .profile-info p:last-child {
+    border-bottom: none;
+  } border: 3px solid #4CAF50;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* Add to your existing DashboardPage.css */
+.earnings-stats,
+.spending-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .stat-card {
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+}
+
+.stat-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.earnings-amount,
+.spent-amount {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.orders-count,
+.products-count {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.favorite-category {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.recent-orders {
+  margin-top: 2rem;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.order-item-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.dark-mode .order-item-mini {
+  background: #333;
+}
+
+.order-item-mini span {
+  flex: 1;
+  text-align: center;
+}
+
+.spending-stats .stat-card {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.dark-mode .spending-stats .stat-card {
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+}
+
+.profile-info p {
+  margin: 0.5rem 0;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.dark-mode .profile-info p {
+  border-bottom-color: #555;
+}
+
+.profile-info p:last-child {
+  border-bottom: none;
+}
+
+.role-badge {
+  background: #4CAF50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+.user-profile-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-profile-pic {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}/* Add these styles to your DashboardPage.css */
+
+.image-preview {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.preview-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #4CAF50;
+}
+
+.image-preview p {
+  margin: 5px 0 0 0;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.dark-mode .image-preview p {
+  color: #ccc;
 }

@@ -8,13 +8,15 @@ const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const [userRating, setUserRating] = useState(0);
 
+  // Ensure price is a number
+  const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
+
   const handleAddToCart = () => {
-    addToCart(product);
+    addToCart({...product, price: price});
   };
 
   const handleRating = (newRating) => {
     setUserRating(newRating);
-    // In a real app, this would send to backend
     console.log(`Rated product ${product.id} with ${newRating} stars`);
   };
 
@@ -26,7 +28,7 @@ const ProductCard = ({ product }) => {
         <p className="product-farmer">{product.farmer}</p>
         <p className="product-description">{product.description}</p>
         <div className="product-details">
-          <span className="product-price">${product.price.toFixed(2)}</span>
+          <span className="product-price">KSh {price.toFixed(2)}</span>
           <span className="product-stock">Stock: {product.stock}</span>
         </div>
 
