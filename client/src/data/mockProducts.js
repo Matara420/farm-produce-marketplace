@@ -2,7 +2,7 @@ export const mockProducts = [
   {
     id: 1,
     name: 'Organic Tomatoes',
-    price: 3.99,
+    price: 150,
     category: 'Vegetables',
     stock: 50,
     image: 'https://via.placeholder.com/200x150/FF6B6B/FFFFFF?text=Tomatoes',
@@ -12,7 +12,7 @@ export const mockProducts = [
   {
     id: 2,
     name: 'Free-Range Eggs',
-    price: 6.99,
+    price: 450,
     category: 'Dairy',
     stock: 24,
     image: 'https://via.placeholder.com/200x150/FECA57/000000?text=Eggs',
@@ -22,7 +22,7 @@ export const mockProducts = [
   {
     id: 3,
     name: 'Honey',
-    price: 8.99,
+    price: 1200,
     category: 'Other',
     stock: 15,
     image: 'https://via.placeholder.com/200x150/FFEAA7/000000?text=Honey',
@@ -32,7 +32,7 @@ export const mockProducts = [
   {
     id: 4,
     name: 'Apples',
-    price: 2.49,
+    price: 80,
     category: 'Fruits',
     stock: 100,
     image: 'https://via.placeholder.com/200x150/FF7675/FFFFFF?text=Apples',
@@ -42,7 +42,7 @@ export const mockProducts = [
   {
     id: 5,
     name: 'Carrots',
-    price: 1.99,
+    price: 60,
     category: 'Vegetables',
     stock: 75,
     image: 'https://via.placeholder.com/200x150/E17055/FFFFFF?text=Carrots',
@@ -52,7 +52,7 @@ export const mockProducts = [
   {
     id: 6,
     name: 'Strawberries',
-    price: 4.99,
+    price: 300,
     category: 'Fruits',
     stock: 30,
     image: 'https://via.placeholder.com/200x150/FD79A8/FFFFFF?text=Strawberries',

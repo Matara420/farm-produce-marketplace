@@ -38,7 +38,7 @@ const Register = () => {
       profilePicture: preview
     };
     signup(userData);
-    navigate('/login');
+    navigate('/marketplace');
   };
 
   return (

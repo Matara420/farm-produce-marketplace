@@ -7,9 +7,9 @@ import { mockProducts } from '../data/mockProducts';
 import './MarketplacePage.css';
 
 const MarketplacePage = () => {
-  const { user, userProducts } = useAuth();
+  const { user, allProducts } = useAuth(); // Use allProducts instead of userProducts
   const navigate = useNavigate();
-  const [filteredProducts, setFilteredProducts] = useState(mockProducts);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -19,8 +19,8 @@ const MarketplacePage = () => {
       return;
     }
 
-    // Combine mock products with user-added products
-    let filtered = [...mockProducts, ...userProducts];
+    // Combine mock products with user-added products (from allProducts)
+    let filtered = [...mockProducts, ...allProducts];
 
     if (selectedCategory !== 'All') {
       filtered = filtered.filter(product => product.category === selectedCategory);
@@ -29,16 +29,16 @@ const MarketplacePage = () => {
     if (searchTerm) {
       filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.farmer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (product.farmer && product.farmer.toLowerCase().includes(searchTerm.toLowerCase())) ||
         product.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     setFilteredProducts(filtered);
-  }, [user, navigate, selectedCategory, searchTerm, userProducts]);
+  }, [user, navigate, selectedCategory, searchTerm, allProducts]); // Add allProducts to dependencies
 
   if (!user) {
-    return null; // Will redirect in useEffect
+    return null;
   }
 
   return (

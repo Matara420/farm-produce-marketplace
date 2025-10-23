@@ -1,122 +1,92 @@
-import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import './AuthPage.css';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
-const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'buyer',
-    profilePicture: null
-  });
-  const { login, signup } = useAuth();
-  const navigate = useNavigate();
+const AuthContext = createContext();
 
-  const handleChange = (e) => {
-    if (e.target.type === 'file') {
-      setFormData({ ...formData, [e.target.name]: e.target.files[0] });
+export function AuthProvider({ children }) {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Set base URL for API calls
+  useEffect(() => {
+    axios.defaults.baseURL = 'http://localhost:5000';
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      // For demo, we'll set a mock user - in real app, verify with backend
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        setCurrentUser(JSON.parse(savedUser));
+      }
+      setLoading(false);
     } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
+      setLoading(false);
+    }
+  }, []);
+
+  const register = async (userData) => {
+    try {
+      const response = await axios.post('/register', userData);
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setCurrentUser(user);
+      return { success: true };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'Registration failed' 
+      };
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isLogin) {
-      // Mock login - check if user exists in localStorage first
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
-        login(user);
-      } else {
-        // If no stored user, create one with selected role (for demo purposes)
-        const user = { id: 1, name: formData.name || 'Demo User', email: formData.email, role: formData.role };
-        login(user);
-      }
-      navigate('/dashboard');
-    } else {
-      // Mock signup - store user data and log them in
-      const user = {
-        id: Date.now(),
-        name: formData.name,
-        email: formData.email,
-        role: formData.role,
-        profilePicture: formData.profilePicture ? URL.createObjectURL(formData.profilePicture) : null
+  const login = async (credentials) => {
+    try {
+      const response = await axios.post('/login', credentials);
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setCurrentUser(user);
+      return { success: true };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'Login failed' 
       };
-      signup(user);
-      navigate('/dashboard');
     }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    delete axios.defaults.headers.common['Authorization'];
+    setCurrentUser(null);
+  };
+
+  const value = {
+    currentUser,
+    register,
+    login,
+    logout,
+    loading
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <div className="auth-tabs">
-          <button
-            className={`auth-tab ${isLogin ? 'active' : ''}`}
-            onClick={() => setIsLogin(true)}
-          >
-            Login
-          </button>
-          <button
-            className={`auth-tab ${!isLogin ? 'active' : ''}`}
-            onClick={() => setIsLogin(false)}
-          >
-            Sign Up
-          </button>
-        </div>
-        <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>
-        <form onSubmit={handleSubmit}>
-          {!isLogin && (
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          )}
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <select name="role" value={formData.role} onChange={handleChange}>
-            <option value="buyer">Buyer</option>
-            <option value="farmer">Farmer</option>
-          </select>
-          {!isLogin && (
-            <div className="file-input-container">
-              <label htmlFor="profilePicture">Profile Picture (Optional)</label>
-              <input
-                type="file"
-                id="profilePicture"
-                name="profilePicture"
-                accept="image/*"
-                onChange={handleChange}
-              />
-            </div>
-          )}
-          <button type="submit">{isLogin ? 'Login' : 'Sign Up'}</button>
-        </form>
-      </div>
-    </div>
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
   );
-};
+}
 
-export default AuthPage;
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}

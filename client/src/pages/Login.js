@@ -17,13 +17,20 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Mock login - in real app, verify credentials
-    const userData = {
-      id: Date.now(),
-      name: formData.email.split('@')[0], // Use email prefix as name
-      email: formData.email,
-      role: 'buyer' // Mock role, in real app determine from backend
-    };
+    const storedUser = localStorage.getItem('user');
+    let userData;
+    
+    if (storedUser) {
+      userData = JSON.parse(storedUser);
+    } else {
+      userData = {
+        id: Date.now(),
+        name: formData.email.split('@')[0],
+        email: formData.email,
+        role: 'buyer'
+      };
+    }
+    
     login(userData);
     navigate('/marketplace');
   };
