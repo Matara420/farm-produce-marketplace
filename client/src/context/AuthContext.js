@@ -1,78 +1,120 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
 const AuthContext = createContext();
 
-export const useAuth = () => useContext(AuthContext);
+export function AuthProvider({ children }) {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
-  const [role, setRole] = useState(() => {
-    const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser).role : null;
-  });
-  
-  // Shared products that all users can see
-  const [allProducts, setAllProducts] = useState([]);
-  const [userProducts, setUserProducts] = useState([]);
-  const [orderHistory, setOrderHistory] = useState([]);
+  // Set base URL for API calls
+  useEffect(() => {
+    axios.defaults.baseURL = 'http://localhost:5000';
+  }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-    setRole(userData.role);
-    localStorage.setItem('user', JSON.stringify(userData));
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      // For demo, we'll set a mock user - in real app, verify with backend
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        setCurrentUser(JSON.parse(savedUser));
+      }
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  const register = async (userData) => {
+    try {
+      const response = await axios.post('/register', userData);
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setCurrentUser(user);
+      return { success: true };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'Registration failed' 
+      };
+    }
+  };
+
+  // ADD THIS SIGNUP FUNCTION - it was missing!
+  const signup = async (userData) => {
+    try {
+      // For demo purposes, create user locally since backend isn't ready
+      const user = {
+        id: Date.now(),
+        name: userData.name,
+        email: userData.email,
+        role: userData.role,
+        profilePicture: userData.profilePicture || null
+      };
+      
+      localStorage.setItem('user', JSON.stringify(user));
+      setCurrentUser(user);
+      return { success: true };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: 'Signup failed' 
+      };
+    }
+  };
+
+  const login = async (credentials) => {
+    try {
+      // For demo purposes, create user locally since backend isn't ready
+      const user = {
+        id: Date.now(),
+        name: credentials.email.split('@')[0],
+        email: credentials.email,
+        role: 'buyer' // Default role for demo
+      };
+      
+      localStorage.setItem('user', JSON.stringify(user));
+      setCurrentUser(user);
+      return { success: true };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: 'Login failed' 
+      };
+    }
   };
 
   const logout = () => {
-    setUser(null);
-    setRole(null);
-    setUserProducts([]);
-    setOrderHistory([]);
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
+    delete axios.defaults.headers.common['Authorization'];
+    setCurrentUser(null);
   };
 
-  const signup = (userData) => {
-    login(userData);
-  };
-
-  const addProduct = (product) => {
-    const newProduct = {
-      ...product,
-      id: Date.now(),
-      farmer: user.name,
-      farmerId: user.id
-    };
-    setUserProducts(prev => [...prev, newProduct]);
-    setAllProducts(prev => [...prev, newProduct]); // Add to shared products
-  };
-
-  const addOrder = (cartItems, totalPrice) => {
-    const order = {
-      id: Date.now(),
-      items: cartItems,
-      total: totalPrice,
-      date: new Date().toLocaleDateString(),
-      status: 'Completed'
-    };
-    setOrderHistory(prev => [...prev, order]);
+  const value = {
+    currentUser,
+    register,
+    signup, // ADD THIS - it was missing from the exported value!
+    login,
+    logout,
+    loading
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      role, 
-      userProducts, 
-      allProducts, // Add this
-      orderHistory, 
-      login, 
-      logout, 
-      signup, 
-      addProduct, 
-      addOrder 
-    }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
