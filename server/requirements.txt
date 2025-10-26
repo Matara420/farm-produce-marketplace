@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 alembic==1.14.1
 aniso8601==10.0.1
 bcrypt==5.0.0
@@ -35,3 +36,13 @@ urllib3==2.2.3
 virtualenv==20.33.0
 Werkzeug==3.0.6
 zipp==3.20.2
+=======
+flask
+flask-sqlalchemy
+flask-migrate
+flask-cors
+flask-jwt-extended
+python-dotenv
+werkzeug
+sqlalchemy-serializer
+>>>>>>> origin/dev

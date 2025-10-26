@@ -1,6 +1,7 @@
 .marketplace-page {
   min-height: 100vh;
   background-color: #f5f5f5;
+  padding: 2rem 0;
 }
 
 .dark-mode .marketplace-page {
@@ -8,9 +9,9 @@
 }
 
 .marketplace-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem;
 }
 
 .marketplace-container h1 {
@@ -22,6 +23,23 @@
 
 .dark-mode .marketplace-container h1 {
   color: #e0e0e0;
+}
+
+.marketplace-layout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+  align-items: start;
+}
+
+.main-content {
+  grid-column: 1;
+}
+
+.sidebar {
+  grid-column: 2;
+  position: sticky;
+  top: 2rem;
 }
 
 .products-grid {
@@ -37,8 +55,43 @@
   font-style: italic;
   font-size: 1.2rem;
   grid-column: 1 / -1;
+  padding: 3rem;
 }
 
 .dark-mode .no-products {
   color: #ccc;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.dark-mode .loading {
+  color: #ccc;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .marketplace-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar {
+    grid-column: 1;
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .marketplace-container {
+    padding: 0 1rem;
+  }
+  
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
 }
