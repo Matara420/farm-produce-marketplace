@@ -1,22 +1,3 @@
-<<<<<<< HEAD
-from flask import Flask
-from flask_migrate import Migrate
-from models import db, User, Product, Order, Rating
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///marketplace.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db.init_app(app)
-migrate = Migrate(app, db)
-
-@app.route('/')
-def home():
-    return "Flask App Running!"
-
-if __name__ == '__main__':
-    app.run(debug=True)
-=======
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -118,7 +99,7 @@ def get_products():
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
-@app.route('/products', methods=['POST'])
+@app.route('/products/<int:id>', methods=['POST'])
 @jwt_required()
 def create_product():
     try:
@@ -188,9 +169,9 @@ def manage_product(id):
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
-@app.route('/orders', methods=['POST'])
+@app.route('/orders/<int:id>', methods=['POST'])
 @jwt_required()
-def create_order():
+def create_order(id):
     try:
         user_id = get_jwt_identity()
         user = User.query.get(user_id)
@@ -394,4 +375,3 @@ def get_current_user():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
->>>>>>> origin/dev

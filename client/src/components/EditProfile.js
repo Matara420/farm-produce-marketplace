@@ -8,7 +8,7 @@ const EditProfile = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/profile", {
+    fetch("/profile", {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
       .then((res) => res.json())
@@ -25,7 +25,7 @@ const EditProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("/api/profile", {
+    fetch("/profile", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

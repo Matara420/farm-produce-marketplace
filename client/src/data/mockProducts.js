@@ -61,4 +61,3 @@ export const mockProducts = [
   }
 ];
 
-export const categories = ['All', 'Vegetables', 'Fruits', 'Dairy', 'Other'];
