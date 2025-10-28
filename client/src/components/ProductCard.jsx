@@ -29,34 +29,34 @@ const ProductCard = ({ product }) => {
     setUserRating(0); // Reset for demo
   };
 
-  // Check if user can review this product
-  useEffect(() => {
-    const checkReviewEligibility = async () => {
-      if (!currentUser || currentUser.role !== 'buyer') return;
+  // // Check if user can review this product
+  // useEffect(() => {
+  //   const checkReviewEligibility = async () => {
+  //     if (!currentUser || currentUser.role !== 'buyer') return;
 
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('/orders', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+  //     try {
+  //       const token = localStorage.getItem('token');
+  //       const response = await axios.get('/orders', {
+  //         headers: {
+  //           'Authorization': `Bearer ${token}`
+  //         }
+  //       });
 
-        // Check if user has purchased this product
-        const hasPurchased = response.data.some(order =>
-          order.status === 'delivered' &&
-          order.products.some(p => p.id === product.id)
-        );
+  //       // Check if user has purchased this product
+  //       const hasPurchased = response.data.some(order =>
+  //         order.status === 'delivered' &&
+  //         order.products.some(p => p.id === product.id)
+  //       );
 
-        setCanReview(hasPurchased);
-      } catch (error) {
-        console.error('Error checking review eligibility:', error);
-        setCanReview(false);
-      }
-    };
+  //       setCanReview(hasPurchased);
+  //     } catch (error) {
+  //       console.error('Error checking review eligibility:', error);
+  //       setCanReview(false);
+  //     }
+  //   };
 
-    checkReviewEligibility();
-  }, [currentUser, product.id]);
+  //   checkReviewEligibility();
+  // }, [currentUser, product.id]);
 
   return (
     <div className="product-card">

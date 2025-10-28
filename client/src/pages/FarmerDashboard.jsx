@@ -16,18 +16,6 @@ const FarmerDashboard = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!currentUser || currentUser.role !== 'farmer') {
-      navigate('/dashboard');
-    }
-  }, [currentUser, navigate]);
-
-  useEffect(() => {
-    if (currentUser && currentUser.role === 'farmer') {
-      fetchFarmerStats();
-    }
-  }, [currentUser, fetchFarmerStats]);
-
   const fetchFarmerStats = React.useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
