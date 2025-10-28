@@ -106,7 +106,7 @@ class Order(db.Model, SerializerMixin):
     def get_product_quantity(self, product_id):
         # Helper method to get quantity for a specific product in this order
         from sqlalchemy import select
-        stmt = select([order_product.c.quantity]).where(
+        stmt = select(order_product.c.quantity).where(
             order_product.c.order_id == self.id,
             order_product.c.product_id == product_id
         )

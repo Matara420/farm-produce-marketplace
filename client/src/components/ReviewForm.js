@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
 import './ReviewForm.css';
 
 const ReviewForm = ({ productId, farmerId, onReviewSubmitted }) => {
-  const { currentUser } = useAuth();
+
   const [score, setScore] = useState(0);
   const [comment, setComment] = useState('');
   const [hoveredScore, setHoveredScore] = useState(0);
@@ -12,7 +11,7 @@ const ReviewForm = ({ productId, farmerId, onReviewSubmitted }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!score) {
       alert('Please select a rating');
       return;
@@ -20,26 +19,61 @@ const ReviewForm = ({ productId, farmerId, onReviewSubmitted }) => {
 
     setSubmitting(true);
     try {
-      await axios.post('/ratings', {
+      const token = localStorage.getItem('token');
+      const response = await axios.post('/ratings', {
         farmer_id: farmerId,
         product_id: productId,
-        score: score * 2, // Convert 1-5 to 1-10 scale
+        score: score * 2, // Convert 1-5 to 1-10 scale as expected by backend
         comment
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
-      
-      alert('Review submitted successfully!');
-      setScore(0);
-      setComment('');
-      if (onReviewSubmitted) {
-        onReviewSubmitted();
+
+      if (response.status === 201) {
+        alert('Review submitted successfully!');
+        setScore(0);
+        setComment('');
+        if (onReviewSubmitted) {
+          onReviewSubmitted();
+        }
+      } else {
+        alert('Failed to submit review');
       }
     } catch (error) {
       console.error('Error submitting review:', error);
-      alert('Failed to submit review. Please try again.');
+      const errorMessage = error.response?.data?.message || 'Failed to submit review. Please try again.';
+      alert(errorMessage);
     } finally {
       setSubmitting(false);
     }
   };
+
+  // // Check if user has purchased this product
+  // const checkPurchaseEligibility = async () => {
+  //   try {
+  //     const token = localStorage.getItem('token');
+  //     const response = await axios.get('/orders', {
+  //       headers: {
+  //         'Authorization': `Bearer ${token}`
+  //       }
+  //     });
+
+  //     // Check if user has any delivered orders containing this product
+  //     const hasPurchased = response.data.some(order =>
+  //       order.status === 'delivered' &&
+  //       order.products.some(product => product.id === productId)
+  //     );
+
+  //     return hasPurchased;
+  //   } catch (error) {
+  //     console.error('Error checking purchase eligibility:', error);
+  //     return false;
+  //   }
+  // };
+
+
 
   return (
     <div className="review-form">

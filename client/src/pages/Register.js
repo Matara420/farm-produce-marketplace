@@ -12,7 +12,7 @@ const Register = () => {
     profilePicture: null
   });
   const [preview, setPreview] = useState(null);
-  const { signup } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,17 +28,22 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const userData = {
-      id: Date.now(),
       name: formData.name,
       email: formData.email,
+      password: formData.password,
       role: formData.role,
-      profilePicture: preview
+      profile_picture: preview
     };
-    signup(userData);
-    navigate('/marketplace');
+
+    const result = await register(userData);
+    if (result.success) {
+      navigate('/login');
+    } else {
+      alert(result.error);
+    }
   };
 
   return (

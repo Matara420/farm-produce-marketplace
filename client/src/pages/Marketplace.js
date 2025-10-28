@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import MarketplacePage from './MarketplacePage';
 
 const Marketplace = () => {
   const { currentUser } = useAuth();
@@ -16,17 +17,7 @@ const Marketplace = () => {
     return null;
   }
 
-  return (
-    <div className="marketplace-page">
-      <div className="marketplace-container">
-        <h1>Marketplace</h1>
-        <p>Browse and shop for fresh farm produce</p>
-        <div className="marketplace-content">
-          <p>Marketplace features coming soon...</p>
-        </div>
-      </div>
-    </div>
-  );
+  return <MarketplacePage />;
 };
 
 export default Marketplace;

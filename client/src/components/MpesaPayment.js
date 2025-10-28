@@ -16,14 +16,26 @@ const MpesaPayment = ({ total, onSuccess }) => {
 
   const handleConfirm = () => {
     setLoading(true);
-    // Simulate M-Pesa API call
+    // Simulate M-Pesa API call - in real implementation, this would integrate with M-Pesa API
+    // For demo purposes, we'll show a message that payment prompt should appear
+    alert(`M-Pesa payment prompt should appear on your phone (${formatPhone(phone)}) now. Please complete the payment by entering your M-Pesa PIN.`);
+
+    // Simulate the actual M-Pesa STK push process
     setTimeout(() => {
-      setLoading(false);
-      setStep('success');
+      // First, show that STK push was sent
+      alert('STK Push sent to your phone. Please check your phone and enter your M-Pesa PIN to complete the payment.');
+
       setTimeout(() => {
-        onSuccess();
-      }, 2000);
-    }, 3000);
+        setLoading(false);
+        // In a real implementation, you would check payment status from M-Pesa API
+        // For demo, we'll assume payment is successful after additional delay
+        alert('Payment completed successfully! Processing your order...');
+        setStep('success');
+        setTimeout(() => {
+          onSuccess();
+        }, 1000);
+      }, 5000); // Wait 5 seconds for user to complete payment
+    }, 2000); // Initial delay for STK push
   };
 
   const formatPhone = (phone) => {

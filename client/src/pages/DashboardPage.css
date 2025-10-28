@@ -311,3 +311,200 @@
 .dark-mode .image-preview p {
   color: #ccc;
 }
+/* FIX 6: Profile picture size - Make it smaller */
+.profile-picture {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4CAF50;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Add to existing DashboardPage.css */
+.dashboard-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.action-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.action-btn.primary {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.action-btn.primary:hover {
+  background-color: #45a049;
+}
+
+.action-btn.secondary {
+  background-color: #2196F3;
+  color: white;
+}
+
+.action-btn.secondary:hover {
+  background-color: #1976D2;
+}
+
+/* Professional Profile Page Styles */
+.profile-section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dark-mode .profile-header {
+  border-bottom-color: #444;
+}
+
+.profile-avatar-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-picture-container {
+  position: relative;
+}
+
+.profile-picture {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #4CAF50;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.profile-picture-placeholder.large {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #4CAF50;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+}
+
+.profile-role-badge {
+  margin-top: 1rem;
+}
+
+.profile-details h2 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 2rem;
+}
+
+.dark-mode .profile-details h2 {
+  color: #e0e0e0;
+}
+
+.profile-email {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.dark-mode .profile-email {
+  color: #ccc;
+}
+
+.profile-member-since {
+  color: #888;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.dark-mode .profile-member-since {
+  color: #aaa;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.dark-mode .profile-stats {
+  background: #2a2a2a;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4CAF50;
+  margin-bottom: 0.5rem;
+}
+
+.dark-mode .stat-number {
+  color: #8BC34A;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dark-mode .stat-label {
+  color: #ccc;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .profile-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .profile-actions {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+}

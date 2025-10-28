@@ -93,6 +93,7 @@
   cursor: pointer;
   transition: background-color 0.3s;
   font-weight: 500;
+  margin-bottom: 8px; /* Add spacing between buttons */
 }
 
 .add-to-cart-btn:hover:not(:disabled) {

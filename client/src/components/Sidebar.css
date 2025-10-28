@@ -1,4 +1,4 @@
-.sidebar-overlay {
+  .sidebar-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -7,14 +7,17 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
     display: flex;
+    justify-content: flex-start;
+    padding-left: 1rem; /* Add padding to move sidebar away from center */
   }
-  
+
   .sidebar {
     width: 280px;
     background: white;
     display: flex;
     flex-direction: column;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    height: 100vh;
   }
   
   .dark-mode .sidebar {
