@@ -12,7 +12,10 @@ import FarmerDashboard from './pages/FarmerDashboard';
 import BuyerDashboard from './pages/BuyerDashboard';
 import Profile from './pages/Profile';
 import AddProduct from './pages/AddProduct';
+import EditProduct from './pages/EditProduct';
 import MyProducts from './pages/MyProducts';
+import OrdersPage from './pages/OrdersPage';
+import OrderHistoryPage from './pages/OrderHistoryPage';
 import './App.css';
 
 function DashboardRouter() {
@@ -43,7 +46,10 @@ function App() {
                 <Route path="/dashboard" element={<DashboardRouter />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/add-product" element={<AddProduct />} />
+                <Route path="/edit-product/:id" element={<EditProduct />} />
                 <Route path="/my-products" element={<MyProducts />} />
+                <Route path="/orders" element={<OrdersPage />} />
+                <Route path="/order-history" element={<OrderHistoryPage />} />
               </Routes>
             </div>
           </Router>

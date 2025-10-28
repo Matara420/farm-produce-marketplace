@@ -16,46 +16,41 @@ const MyProducts = () => {
       navigate('/dashboard');
       return;
     }
+
+    const fetchMyProducts = async () => {
+      try {
+        const response = await axios.get('/products');
+        // Filter products to show only current farmer's products
+        const myProducts = response.data.filter(
+          product => product.farmer_id === currentUser.id
+        );
+        setProducts(myProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchMyProducts();
   }, [currentUser, navigate]);
-
-  const fetchMyProducts = async () => {
-    try {
-      const response = await axios.get('/products');
-      // Filter products to show only current farmer's products
-      const myProducts = response.data.filter(
-        product => product.farmer_id === currentUser.id
-      );
-      setProducts(myProducts);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      // Mock data for demo
-      setProducts([
-        {
-          id: 1,
-          name: 'Organic Tomatoes',
-          price: 150,
-          category: 'Vegetables',
-          stock: 50,
-          image: 'https://via.placeholder.com/200x150/FF6B6B/FFFFFF?text=Tomatoes',
-          farmer: 'Green Valley Farm',
-          description: 'Fresh, vine-ripened organic tomatoes'
-        }
-      ]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDeleteProduct = async (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`/products/${productId}`);
+        const token = localStorage.getItem('token');
+        await axios.delete(`/products/${productId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         setProducts(prev => prev.filter(p => p.id !== productId));
         alert('Product deleted successfully!');
       } catch (error) {
         console.error('Error deleting product:', error);
-        alert('Failed to delete product. Please try again.');
+        const errorMessage = error.response?.data?.message || 'Failed to delete product. Please try again.';
+        alert(errorMessage);
       }
     }
   };

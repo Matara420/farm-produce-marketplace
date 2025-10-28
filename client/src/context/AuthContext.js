@@ -7,29 +7,48 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Set base URL for API calls
   useEffect(() => {
-    axios.defaults.baseURL = 'http://localhost:5000';
+    axios.defaults.baseURL = 'http://localhost:3000';
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setCurrentUser(JSON.parse(savedUser));
+    }
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+    setLoading(false);
   }, []);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      // For demo, we'll set a mock user - in real app, verify with backend
-      const savedUser = localStorage.getItem('user');
-      if (savedUser) {
-        setCurrentUser(JSON.parse(savedUser));
-      }
-      setLoading(false);
-    } else {
-      setLoading(false);
     }
   }, []);
 
   const register = async (userData) => {
     try {
       const response = await axios.post('/register', userData);
+      // Don't auto-login after registration - redirect to login page
+      // Don't auto-login after registration - redirect to login page
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Registration failed'
+      };
+    }
+  };
+
+
+
+  const login = async (credentials) => {
+    try {
+      const response = await axios.post('/login', credentials);
       const { token, user } = response.data;
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
@@ -37,53 +56,9 @@ export function AuthProvider({ children }) {
       setCurrentUser(user);
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.message || 'Registration failed' 
-      };
-    }
-  };
-
-  // ADD THIS SIGNUP FUNCTION - it was missing!
-  const signup = async (userData) => {
-    try {
-      // For demo purposes, create user locally since backend isn't ready
-      const user = {
-        id: Date.now(),
-        name: userData.name,
-        email: userData.email,
-        role: userData.role,
-        profilePicture: userData.profilePicture || null
-      };
-      
-      localStorage.setItem('user', JSON.stringify(user));
-      setCurrentUser(user);
-      return { success: true };
-    } catch (error) {
-      return { 
-        success: false, 
-        error: 'Signup failed' 
-      };
-    }
-  };
-
-  const login = async (credentials) => {
-    try {
-      // For demo purposes, create user locally since backend isn't ready
-      const user = {
-        id: Date.now(),
-        name: credentials.email.split('@')[0],
-        email: credentials.email,
-        role: 'buyer' // Default role for demo
-      };
-      
-      localStorage.setItem('user', JSON.stringify(user));
-      setCurrentUser(user);
-      return { success: true };
-    } catch (error) {
-      return { 
-        success: false, 
-        error: 'Login failed' 
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Login failed'
       };
     }
   };
@@ -95,12 +70,35 @@ export function AuthProvider({ children }) {
     setCurrentUser(null);
   };
 
+  const updateUser = (updatedUser) => {
+    setCurrentUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+  };
+
+  const addOrder = (cartItems, totalPrice) => {
+    const order = {
+      id: Date.now(),
+      userId: currentUser?.id,
+      items: cartItems,
+      total: totalPrice,
+      date: new Date().toISOString(),
+      status: 'completed'
+    };
+
+    const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+    existingOrders.push(order);
+    localStorage.setItem('orders', JSON.stringify(existingOrders));
+
+    return order;
+  };
+
   const value = {
     currentUser,
     register,
-    signup, // ADD THIS - it was missing from the exported value!
     login,
     logout,
+    updateUser,
+    addOrder,
     loading
   };
 

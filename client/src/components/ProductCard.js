@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import ReviewForm from './ReviewForm';
+import axios from 'axios';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
@@ -9,6 +10,7 @@ const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [userRating, setUserRating] = useState(0);
+  const [canReview, setCanReview] = useState(false);
 
   const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
 
@@ -27,6 +29,35 @@ const ProductCard = ({ product }) => {
     setUserRating(0); // Reset for demo
   };
 
+  // Check if user can review this product
+  useEffect(() => {
+    const checkReviewEligibility = async () => {
+      if (!currentUser || currentUser.role !== 'buyer') return;
+
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('/orders', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        // Check if user has purchased this product
+        const hasPurchased = response.data.some(order =>
+          order.status === 'delivered' &&
+          order.products.some(p => p.id === product.id)
+        );
+
+        setCanReview(hasPurchased);
+      } catch (error) {
+        console.error('Error checking review eligibility:', error);
+        setCanReview(false);
+      }
+    };
+
+    checkReviewEligibility();
+  }, [currentUser, product.id]);
+
   return (
     <div className="product-card">
       <img 
@@ -37,7 +68,7 @@ const ProductCard = ({ product }) => {
       />
       <div className="product-info">
         <h3 className="product-name">{product.name}</h3>
-        <p className="product-farmer">{product.farmer}</p>
+        <p className="product-farmer">Farmer: {product.farmer}</p>
         <p className="product-description">{product.description}</p>
         <div className="product-details">
           <span className="product-price">KSh {price.toFixed(2)}</span>

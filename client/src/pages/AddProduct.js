@@ -14,7 +14,6 @@ const AddProduct = () => {
     category: 'Vegetables',
     stock: '',
     image: '',
-    imageUrl: ''
   });
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState('');
@@ -38,20 +37,10 @@ const AddProduct = () => {
         setFormData(prev => ({ 
           ...prev, 
           image: e.target.result,
-          imageUrl: '' 
         }));
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  const handleImageUrlChange = (e) => {
-    setFormData(prev => ({ 
-      ...prev, 
-      image: e.target.value,
-      imageUrl: e.target.value 
-    }));
-    setPreview(e.target.value);
   };
 
   const handleSubmit = async (e) => {
@@ -59,30 +48,41 @@ const AddProduct = () => {
     setLoading(true);
 
     try {
-      await axios.post('/products', {
+      const token = localStorage.getItem('token');
+      const productData = {
         name: formData.name,
         price: parseFloat(formData.price),
         category: formData.category,
         stock: parseInt(formData.stock),
-        image: formData.image,
-        description: formData.description
+        description: formData.description,
+        image: formData.image || 'https://via.placeholder.com/200x150/4CAF50/FFFFFF?text=Product'
+      };
+
+      const response = await axios.post('/products', productData, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
 
-      alert('Product added successfully!');
-      setFormData({
-        name: '',
-        description: '',
-        price: '',
-        category: 'Vegetables',
-        stock: '',
-        image: '',
-        imageUrl: ''
-      });
-      setPreview('');
-      navigate('/my-products');
+      if (response.status === 201) {
+        alert('Product added successfully!');
+        setFormData({
+          name: '',
+          description: '',
+          price: '',
+          category: 'Vegetables',
+          stock: '',
+          image: '',
+        });
+        setPreview('');
+        navigate('/my-products');
+      } else {
+        alert('Failed to add product');
+      }
     } catch (error) {
       console.error('Error adding product:', error);
-      alert('Failed to add product. Please try again.');
+      const errorMessage = error.response?.data?.message || 'Failed to add product. Please try again.';
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -166,7 +166,7 @@ const AddProduct = () => {
               value={formData.description}
               onChange={handleInputChange}
               required
-              placeholder="Describe your product... (e.g., Fresh, organic tomatoes grown locally)"
+              placeholder="Describe your product..."
               rows="3"
             />
           </div>
@@ -185,20 +185,6 @@ const AddProduct = () => {
                   onChange={handleImageUpload}
                 />
                 <p className="upload-note">Supported: JPG, PNG, WebP</p>
-              </div>
-
-              <div className="or-divider">OR</div>
-
-              <div className="upload-option">
-                <label htmlFor="image-url">Enter Image URL</label>
-                <input
-                  type="url"
-                  id="image-url"
-                  name="imageUrl"
-                  value={formData.imageUrl}
-                  onChange={handleImageUrlChange}
-                  placeholder="https://example.com/image.jpg"
-                />
               </div>
             </div>
 

@@ -34,14 +34,20 @@ const Sidebar = ({ isOpen, onClose }) => {
         {/* User Profile Section */}
         <div className="sidebar-user-section">
           {currentUser?.profilePicture ? (
-            <img 
-              src={currentUser.profilePicture} 
-              alt="Profile" 
+            <img
+              src={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `http://localhost:5000${currentUser.profilePicture}`}
+              alt="Profile"
               className="sidebar-profile-pic"
+              style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }}
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
             />
-          ) : (
+          ) : null}
+          {!currentUser?.profilePicture && (
             <div className="sidebar-profile-placeholder">
-              <User size={24} />
+              <span>{currentUser?.name?.charAt(0).toUpperCase()}</span>
             </div>
           )}
           <div className="sidebar-user-info">
@@ -126,12 +132,11 @@ const Sidebar = ({ isOpen, onClose }) => {
           </Link>
         </nav>
 
-        {/* Bottom Actions */}
+        {/* Bottom Actions - FIX 3 & 4: Added logout and theme toggle */}
         <div className="sidebar-actions">
           <button 
             className="sidebar-action-btn"
             onClick={toggleTheme}
-            title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>

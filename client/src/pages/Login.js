@@ -15,24 +15,14 @@ const Login = () => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const storedUser = localStorage.getItem('user');
-    let userData;
-    
-    if (storedUser) {
-      userData = JSON.parse(storedUser);
+    const result = await login(formData);
+    if (result.success) {
+      navigate('/marketplace');
     } else {
-      userData = {
-        id: Date.now(),
-        name: formData.email.split('@')[0],
-        email: formData.email,
-        role: 'buyer'
-      };
+      alert(result.error);
     }
-    
-    login(userData);
-    navigate('/marketplace');
   };
 
   return (

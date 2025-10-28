@@ -1,21 +1,54 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import MpesaPayment from './MpesaPayment';
+import axios from 'axios';
 import './Cart.css';
 
 const Cart = ({ isOpen, onClose }) => {
   const { cart, removeFromCart, updateQuantity, getTotalPrice, clearCart } = useCart();
-  const { addOrder } = useAuth();
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
   const [showPayment, setShowPayment] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleCheckout = () => {
-    const totalPrice = getTotalPrice();
-    addOrder(cart, totalPrice);
-    alert(`Checkout successful! Total: KSh ${totalPrice.toFixed(2)}\n\nThank you for your purchase!`);
-    clearCart();
-    setShowPayment(false);
-    onClose();
+  const handleCheckout = async () => {
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const orderData = {
+        products: cart.map(item => ({
+          id: item.id,
+          quantity: item.quantity
+        }))
+      };
+
+      const response = await axios.post('/orders', orderData, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.status === 201) {
+        // Don't show alert, let MpesaPayment handle success message
+        clearCart();
+        setShowPayment(false);
+        onClose();
+        navigate('/orders');
+      }
+    } catch (error) {
+      console.error('Error placing order:', error);
+      const errorMessage = error.response?.data?.message || 'Failed to place order. Please try again.';
+      alert(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleMpesaSuccess = () => {
@@ -80,15 +113,16 @@ const Cart = ({ isOpen, onClose }) => {
             </div>
             
             {!showPayment ? (
-              <button 
-                className="checkout-btn" 
+              <button
+                className="checkout-btn"
                 onClick={() => setShowPayment(true)}
+                disabled={loading}
               >
-                Proceed to Checkout
+                {loading ? 'Processing...' : 'Proceed to Checkout'}
               </button>
             ) : (
-              <MpesaPayment 
-                total={getTotalPrice()} 
+              <MpesaPayment
+                total={getTotalPrice()}
                 onSuccess={handleMpesaSuccess}
               />
             )}

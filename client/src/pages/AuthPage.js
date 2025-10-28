@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
 
   // Set base URL for API calls
   useEffect(() => {
-    axios.defaults.baseURL = 'http://localhost:5000';
+    axios.defaults.baseURL = 'http://localhost:3000';
   }, []);
 
   useEffect(() => {

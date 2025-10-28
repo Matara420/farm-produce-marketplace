@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
@@ -134,7 +134,9 @@ def create_product():
 @app.route('/products/<int:id>', methods=['GET'])
 def get_product(id):
     try:
-        product = Product.query.get_or_404(id)
+        product = Product.query.get(id)
+        if not product:
+            return jsonify({'message': 'Product not found'}), 404
         return jsonify(product.to_dict())
     except Exception as e:
         return jsonify({'message': str(e)}), 500
@@ -175,54 +177,54 @@ def create_order(id):
     try:
         user_id = get_jwt_identity()
         user = User.query.get(user_id)
-        
+
         if user.role != 'buyer':
             return jsonify({'message': 'Only buyers can create orders'}), 403
-        
+
         data = request.get_json()
         if not all(k in data for k in ['products']):
             return jsonify({'message': 'Missing products'}), 400
-        
+
         # Calculate total amount and check stock
         total_amount = 0
         products_to_order = []
-        
+
         for item in data['products']:
             product = Product.query.get(item['id'])
             if not product:
                 return jsonify({'message': f'Product {item["id"]} not found'}), 404
-            
+
             if product.stock < item.get('quantity', 1):
                 return jsonify({'message': f'Insufficient stock for {product.name}'}), 400
-            
+
             total_amount += product.price * item.get('quantity', 1)
             products_to_order.append((product, item.get('quantity', 1)))
-        
-        # Create order
+
+        # Create order with 'confirmed' status since payment is successful
         order = Order(
             buyer_id=user_id,
             total_amount=total_amount,
-            status='pending'
+            status='confirmed'  # Changed from 'pending' to 'confirmed' since payment succeeded
         )
         db.session.add(order)
         db.session.flush()  # Get order ID
-        
+
         # Add products to order and update stock
         for product, quantity in products_to_order:
-            # Add to order_product table
-            stmt = order_product.insert().values(
+            # Add to order_product table using raw SQL
+            insert_stmt = order_product.insert().values(
                 order_id=order.id,
                 product_id=product.id,
                 quantity=quantity
             )
-            db.session.execute(stmt)
-            
+            db.session.execute(insert_stmt)
+
             # Update product stock
             product.stock -= quantity
-        
+
         db.session.commit()
         return jsonify(order.to_dict()), 201
-        
+
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': str(e)}), 500
@@ -271,9 +273,55 @@ def update_order(id):
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
-@app.route('/ratings', methods=['POST'])
+@app.route('/ratings', methods=['GET', 'POST'])
 @jwt_required()
-def create_rating():
+def get_ratings():
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+
+        if request.method == 'GET':
+            # Get ratings - buyers see their own ratings, farmers see ratings for their products
+            if user.role == 'buyer':
+                ratings = Rating.query.filter_by(buyer_id=user_id).all()
+            else:  # farmer
+                ratings = Rating.query.filter_by(farmer_id=user_id).all()
+
+            return jsonify([rating.to_dict() for rating in ratings])
+
+        elif request.method == 'POST':
+            if user.role != 'buyer':
+                return jsonify({'message': 'Only buyers can submit ratings'}), 403
+
+            data = request.get_json()
+            if not all(k in data for k in ['farmer_id', 'product_id', 'score']):
+                return jsonify({'message': 'Missing required fields'}), 400
+
+            # Check if buyer has purchased this product
+            order = Order.query.join(order_product).filter(
+                Order.buyer_id == user_id,
+                Order.status.in_(['confirmed', 'delivered']),
+                order_product.c.product_id == data['product_id']
+            ).first()
+
+            if not order:
+                return jsonify({'message': 'You can only rate products you have purchased'}), 403
+
+            rating = Rating(
+                buyer_id=user_id,
+                farmer_id=data['farmer_id'],
+                product_id=data['product_id'],
+                score=data['score'],
+                comment=data.get('comment', '')
+            )
+
+            db.session.add(rating)
+            db.session.commit()
+
+            return jsonify(rating.to_dict()), 201
+
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
     try:
         user_id = get_jwt_identity()
         user = User.query.get(user_id)
@@ -314,30 +362,41 @@ def create_rating():
 @app.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
     try:
+        # Get farmers with ratings
         leaderboard = db.session.query(
             User.id.label('farmer_id'),
             User.name,
             func.avg(Rating.score).label('avg_rating'),
-            func.count(Order.id.distinct()).label('order_count')
+            func.count(Rating.id).label('rating_count')
         ).join(Rating, Rating.farmer_id == User.id) \
-         .outerjoin(Product, Product.farmer_id == User.id) \
-         .outerjoin(Order.order_products) \
          .filter(User.role == 'farmer') \
          .group_by(User.id) \
-         .order_by(func.avg(Rating.score).desc(), func.count(Order.id.distinct()).desc()) \
+         .order_by(func.avg(Rating.score).desc()) \
          .all()
-        
+
+        # Get order counts separately
+        order_counts = db.session.query(
+            Product.farmer_id,
+            func.count(Order.id.distinct()).label('order_count')
+        ).join(order_product, order_product.c.product_id == Product.id) \
+         .join(Order, Order.id == order_product.c.order_id) \
+         .filter(Order.status == 'delivered') \
+         .group_by(Product.farmer_id) \
+         .all()
+
+        order_count_dict = {row.farmer_id: row.order_count for row in order_counts}
+
         result = []
         for row in leaderboard:
             result.append({
                 'farmer_id': row.farmer_id,
                 'name': row.name,
                 'avg_rating': round(float(row.avg_rating or 0) / 2, 1),  # Convert 1-10 to 1-5
-                'order_count': row.order_count or 0
+                'order_count': order_count_dict.get(row.farmer_id, 0)
             })
-        
+
         return jsonify(result)
-        
+
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
@@ -362,6 +421,130 @@ def get_certificate_eligibility():
         
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+
+@app.route('/users/profile', methods=['GET', 'PUT'])
+@jwt_required()
+def get_profile():
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+
+        if request.method == 'GET':
+            return jsonify(user.to_dict())
+
+        elif request.method == 'PUT':
+            # Handle form data for file uploads
+            if request.content_type and 'multipart/form-data' in request.content_type:
+                name = request.form.get('name')
+                email = request.form.get('email')
+                profile_picture_file = request.files.get('profile_picture')
+
+                if name:
+                    user.name = name
+                if email:
+                    # Check if email is already taken by another user
+                    existing_user = User.query.filter_by(email=email).first()
+                    if existing_user and existing_user.id != user_id:
+                        return jsonify({'message': 'Email already exists'}), 400
+                    user.email = email
+
+                if profile_picture_file:
+                    # Save the uploaded file (you might want to use a proper file storage solution)
+                    filename = f"user_{user_id}_profile.jpg"
+                    profile_picture_file.save(os.path.join('uploads', filename))
+                    user.profile_picture = f"/uploads/{filename}"
+            else:
+                # Handle JSON data
+                data = request.get_json()
+                if 'name' in data:
+                    user.name = data['name']
+                if 'email' in data:
+                    existing_user = User.query.filter_by(email=data['email']).first()
+                    if existing_user and existing_user.id != user_id:
+                        return jsonify({'message': 'Email already exists'}), 400
+                    user.email = data['email']
+                if 'profile_picture' in data:
+                    user.profile_picture = data['profile_picture']
+
+            db.session.commit()
+            return jsonify(user.to_dict())
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+
+        # Handle form data for file uploads
+        if request.content_type and 'multipart/form-data' in request.content_type:
+            name = request.form.get('name')
+            email = request.form.get('email')
+            profile_picture_file = request.files.get('profile_picture')
+
+            if name:
+                user.name = name
+            if email:
+                # Check if email is already taken by another user
+                existing_user = User.query.filter_by(email=email).first()
+                if existing_user and existing_user.id != user_id:
+                    return jsonify({'message': 'Email already exists'}), 400
+                user.email = email
+
+            if profile_picture_file:
+                # Save the uploaded file (you might want to use a proper file storage solution)
+                filename = f"user_{user_id}_profile.jpg"
+                profile_picture_file.save(os.path.join('uploads', filename))
+                user.profile_picture = f"/uploads/{filename}"
+        else:
+            # Handle JSON data
+            data = request.get_json()
+            if 'name' in data:
+                user.name = data['name']
+            if 'email' in data:
+                existing_user = User.query.filter_by(email=data['email']).first()
+                if existing_user and existing_user.id != user_id:
+                    return jsonify({'message': 'Email already exists'}), 400
+                user.email = data['email']
+            if 'profile_picture' in data:
+                user.profile_picture = data['profile_picture']
+
+        db.session.commit()
+        return jsonify(user.to_dict())
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500
+
+@app.route('/users/change-password', methods=['PUT'])
+@jwt_required()
+def change_password():
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+
+        data = request.get_json()
+        if not all(k in data for k in ['current_password', 'new_password']):
+            return jsonify({'message': 'Missing required fields'}), 400
+
+        if not user.check_password(data['current_password']):
+            return jsonify({'message': 'Current password is incorrect'}), 400
+
+        if len(data['new_password']) < 6:
+            return jsonify({'message': 'New password must be at least 6 characters long'}), 400
+
+        user.set_password(data['new_password'])
+        db.session.commit()
+
+        return jsonify({'message': 'Password changed successfully'})
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500
+
+@app.route('/uploads/<path:filename>')
+def uploaded_file(filename):
+    return send_from_directory('uploads', filename)
 
 @app.route('/me', methods=['GET'])
 @jwt_required()
