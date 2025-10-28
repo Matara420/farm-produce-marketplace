@@ -520,12 +520,12 @@
   animation: spin 1s linear infinite;
 }
 
-/* Icons (using Unicode or you can replace with actual icon library) */
+/* Icons (using Unicode or you can replace with actual icon library)
 .icon-calendar::before { content: "📅 "; }
 .icon-shield::before { content: "🛡️ "; }
 .icon-edit::before { content: "✏️ "; }
 .icon-lock::before { content: "🔒 "; }
-.icon-upload::before { content: "📤 "; }
+.icon-upload::before { content: "📤 "; } */
 
 /* Responsive Design */
 @media (max-width: 768px) {
