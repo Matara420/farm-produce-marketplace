@@ -1,12 +1,16 @@
-# Farm Produce Marketplace - Issues to Fix
+# Farm Produce Marketplace - Farmer Profile Feature Implementation
 
-## Issues Identified:
-1. **Signup Navigation Issue**: After signing up, users are redirected to login instead of marketplace
-2. **Add Product Issue**: Products are not being added to the marketplace (currently using localStorage instead of API)
-3. **Profile Picture Size**: Profile picture is too big in the profile page
-4. **Empty Marketplace**: Marketplace shows no products because it's not fetching from the seeded database
+## Current Tasks:
+- [ ] Add phone_number field to User model in models.py
+- [ ] Create database migration for phone_number field
+- [ ] Add /users/farmer/<id> API endpoint in app.py with farmer stats
+- [ ] Update seed.py to include phone numbers for farmers
+- [ ] Make ProductCard farmer name clickable for navigation
+- [ ] Create FarmerProfile.jsx component with details, stats, products, ratings, message button
+- [ ] Add /farmer-profile/:farmerId route in App.jsx
+- [ ] Test complete flow from product card to messaging
 
-## Fixes Applied:
+## Completed Tasks:
 - ✅ **Signup Navigation**: Changed navigation from '/login' to '/marketplace' after successful registration
 - ✅ **Profile Picture Size**: Reduced profile picture size from 120px to 100px with proper styling (objectFit: cover, borderRadius: 50%)
 - ✅ **Database Seeding**: Seeded the database with sample products and users
@@ -21,8 +25,3 @@
 - ❌ **Empty Marketplace**: Need to verify that MarketplacePage is fetching products from the seeded database
 - ❌ **Edit Profile Button**: Add functionality to edit profile button in Profile.js
 - ❌ **Change Password Button**: Add functionality to change password button in Profile.js
-
-## Next Steps:
-1. Fix AddProduct.js to properly send products to the backend API
-2. Ensure MarketplacePage fetches products from the seeded database
-3. Test all functionality end-to-end

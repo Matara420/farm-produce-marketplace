@@ -16,6 +16,8 @@ import EditProduct from './pages/EditProduct';
 import MyProducts from './pages/MyProducts';
 import OrdersPage from './pages/OrdersPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
+import ChatPage from './pages/ChatPage';
+import FarmerProfile from './pages/FarmerProfile';
 import './App.css';
 
 function DashboardRouter() {
@@ -50,6 +52,8 @@ function App() {
                 <Route path="/my-products" element={<MyProducts />} />
                 <Route path="/orders" element={<OrdersPage />} />
                 <Route path="/order-history" element={<OrderHistoryPage />} />
+                <Route path="/chat/:userId" element={<ChatPage />} />
+                <Route path="/farmer-profile/:farmerId" element={<FarmerProfile />} />
               </Routes>
             </div>
           </Router>

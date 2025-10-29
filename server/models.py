@@ -19,6 +19,7 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), nullable=False)  # 'farmer' or 'buyer'
+    phone_number = db.Column(db.String(20))
     profile_picture = db.Column(db.String(200))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
@@ -42,6 +43,7 @@ class User(db.Model, SerializerMixin):
             'name': self.name,
             'email': self.email,
             'role': self.role,
+            'phone_number': self.phone_number,
             'profile_picture': self.profile_picture,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
@@ -122,7 +124,7 @@ class Rating(db.Model, SerializerMixin):
     score = db.Column(db.Integer, nullable=False)  # 1-10
     comment = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
     serialize_rules = ('-buyer.ratings_given', '-rated_farmer.ratings_received', '-product.ratings')
 
     def to_dict(self):
@@ -135,4 +137,29 @@ class Rating(db.Model, SerializerMixin):
             'comment': self.comment,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'buyer_name': self.buyer.name if self.buyer else None
+        }
+
+class Message(db.Model, SerializerMixin):
+    __tablename__ = 'messages'
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationships
+    sender = db.relationship('User', foreign_keys=[sender_id], backref='sent_messages')
+    receiver = db.relationship('User', foreign_keys=[receiver_id], backref='received_messages')
+
+    serialize_rules = ('-sender.sent_messages', '-receiver.received_messages')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'sender_id': self.sender_id,
+            'receiver_id': self.receiver_id,
+            'content': self.content,
+            'timestamp': self.timestamp.isoformat() if self.timestamp else None,
+            'sender_name': self.sender.name if self.sender else None,
+            'receiver_name': self.receiver.name if self.receiver else None
         }

@@ -18,13 +18,15 @@ def seed_database():
                 email="farmer@example.com",
                 password=generate_password_hash("password123"),
                 role="farmer",
+                phone_number="+254712345678",
                 profile_picture="https://via.placeholder.com/150/4CAF50/FFFFFF?text=JF"
             ),
             User(
                 name="Sarah Buyer",
-                email="buyer@example.com", 
+                email="buyer@example.com",
                 password=generate_password_hash("password123"),
                 role="buyer",
+                phone_number="+254798765432",
                 profile_picture="https://via.placeholder.com/150/2196F3/FFFFFF?text=SB"
             ),
             User(
@@ -32,13 +34,15 @@ def seed_database():
                 email="greenvalley@example.com",
                 password=generate_password_hash("password123"),
                 role="farmer",
+                phone_number="+254723456789",
                 profile_picture="https://via.placeholder.com/150/4CAF50/FFFFFF?text=GV"
             ),
             User(
                 name="Organic Harvest Co.",
                 email="organicharvest@example.com",
-                password=generate_password_hash("password123"), 
+                password=generate_password_hash("password123"),
                 role="farmer",
+                phone_number="+254734567890",
                 profile_picture="https://via.placeholder.com/150/8BC34A/FFFFFF?text=OH"
             )
         ]

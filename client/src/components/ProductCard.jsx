@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 import ReviewForm from './ReviewForm';
-import axios from 'axios';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
   const { currentUser } = useAuth();
   const { addToCart } = useCart();
+  const navigate = useNavigate();
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [userRating, setUserRating] = useState(0);
   // const [canReview, setCanReview] = useState(false);
@@ -68,7 +69,24 @@ const ProductCard = ({ product }) => {
       />
       <div className="product-info">
         <h3 className="product-name">{product.name}</h3>
-        <p className="product-farmer">Farmer: {product.farmer}</p>
+        <p className="product-farmer">
+          Farmer: <span
+            className="farmer-link"
+            onClick={() => navigate(`/farmer-profile/${product.farmer_id}`)}
+            style={{ cursor: 'pointer', color: '#4CAF50', textDecoration: 'underline' }}
+          >
+            {product.farmer}
+          </span>
+          {currentUser && currentUser.role === 'buyer' && currentUser.id !== product.farmer_id && (
+            <button
+              className="chat-btn"
+              onClick={() => navigate(`/chat/${product.farmer_id}`)}
+              title="Chat with farmer"
+            >
+              💬
+            </button>
+          )}
+        </p>
         <p className="product-description">{product.description}</p>
         <div className="product-details">
           <span className="product-price">KSh {price.toFixed(2)}</span>
