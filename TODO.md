@@ -1,27 +1,12 @@
-# Farm Produce Marketplace - Farmer Profile Feature Implementation
+# TODO: Improve Platform Professionalism and Fix Issues
 
-## Current Tasks:
-- [ ] Add phone_number field to User model in models.py
-- [ ] Create database migration for phone_number field
-- [ ] Add /users/farmer/<id> API endpoint in app.py with farmer stats
-- [ ] Update seed.py to include phone numbers for farmers
-- [ ] Make ProductCard farmer name clickable for navigation
-- [ ] Create FarmerProfile.jsx component with details, stats, products, ratings, message button
-- [ ] Add /farmer-profile/:farmerId route in App.jsx
-- [ ] Test complete flow from product card to messaging
-
-## Completed Tasks:
-- ✅ **Signup Navigation**: Changed navigation from '/login' to '/marketplace' after successful registration
-- ✅ **Profile Picture Size**: Reduced profile picture size from 120px to 100px with proper styling (objectFit: cover, borderRadius: 50%)
-- ✅ **Database Seeding**: Seeded the database with sample products and users
-- ✅ **Profile Picture Display**: Fixed profile picture display in sidebar and profile page with proper URL handling and fallbacks
-- ✅ **Review System**: Added purchase eligibility check for reviews - users can only review products they have purchased and received
-- ✅ **Individual Product Reviews**: Modified order history to show individual review buttons for each product instead of whole order reviews
-- ✅ **Farmer Dashboard Enhancement**: Added section showing successfully sold products with units sold and revenue
-- ✅ **Profile Actions Spacing**: Fixed spacing between Edit Profile and Change Password buttons
-
-## Remaining Issues:
-- ❌ **Add Product Issue**: Still needs to be fixed - currently using axios but may need to ensure proper API integration
-- ❌ **Empty Marketplace**: Need to verify that MarketplacePage is fetching products from the seeded database
-- ❌ **Edit Profile Button**: Add functionality to edit profile button in Profile.js
-- ❌ **Change Password Button**: Add functionality to change password button in Profile.js
+## Tasks
+- [x] Update ProductCard.css: Reduce product-image height to 100px, decrease font sizes and paddings for compact, professional look.
+- [x] Update ChatBox.jsx: Modify formatTime function to add 3 hours for East Africa Time (UTC+3) to correct timezone offset.
+- [x] Update ChatBox.css: Reduce message font size from 14px to 12px for better professionalism.
+- [x] Review MarketplacePage.css: Ensure consistent sizing, reduce any oversized elements (e.g., fonts, paddings).
+- [x] Review other CSS files (e.g., index.css, Sidebar.css, etc.) for size consistency and professionalism.
+- [x] Test UI changes in browser to verify professional sizing and correct time display.
+- [x] Run app locally if needed to confirm changes.
+- [x] Update MpesaPayment.css: Reduce paddings, margins, font sizes, and border radii for compactness and professionalism.
+- [x] Update ChatPage.css: Reduce paddings, margins, font sizes, and border radii for compactness and professionalism.

@@ -1,10 +1,10 @@
 .mpesa-payment {
     border: 2px solid #00A650;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    margin: 1.25rem 0;
+    border-radius: 0.75rem;
+    padding: 1.2rem;
+    margin: 1rem 0;
     background: linear-gradient(135deg, #f8fff8 0%, #ffffff 100%);
-    box-shadow: 0 0.5rem 2rem rgba(0, 166, 80, 0.15);
+    box-shadow: 0 0.25rem 1rem rgba(0, 166, 80, 0.15);
     position: relative;
     overflow: hidden;
   }
@@ -27,8 +27,8 @@
 
   .mpesa-header {
     text-align: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
     border-bottom: 2px solid #e8f5e8;
     position: relative;
   }
@@ -38,17 +38,17 @@
   }
 
   .mpesa-logo {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: #00A650;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     text-shadow: 0 0.125rem 0.25rem rgba(0, 166, 80, 0.3);
   }
 
   .mpesa-header h3 {
     margin: 0;
     color: #2d3748;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 600;
   }
 
@@ -61,19 +61,19 @@
   .mpesa-confirm-section {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.8rem;
   }
 
   .input-group {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
   }
 
   .input-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     font-weight: 600;
     color: #2d3748;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .dark-mode .input-group label {
@@ -82,10 +82,10 @@
 
   .phone-input {
     width: 100%;
-    padding: 0.875rem 1rem;
+    padding: 0.7rem 0.8rem;
     border: 2px solid #e2e8f0;
-    border-radius: 0.75rem;
-    font-size: 1rem;
+    border-radius: 0.6rem;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
     box-sizing: border-box;
     background: white;
@@ -115,9 +115,9 @@
   /* Payment Details */
   .payment-details {
     background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
-    padding: 1.25rem;
-    border-radius: 0.75rem;
-    margin-bottom: 1.25rem;
+    padding: 1rem;
+    border-radius: 0.6rem;
+    margin-bottom: 1rem;
     text-align: center;
     border: 1px solid #c6f6d5;
   }
@@ -128,9 +128,9 @@
   }
 
   .payment-details p {
-    margin: 0.75rem 0;
+    margin: 0.6rem 0;
     color: #2d3748;
-    font-size: 1.05rem;
+    font-size: 1rem;
   }
 
   .dark-mode .payment-details p {
@@ -147,13 +147,13 @@
   }
 
   .instruction {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #718096;
     font-style: italic;
-    margin-top: 1rem !important;
-    padding: 0.75rem;
+    margin-top: 0.8rem !important;
+    padding: 0.6rem;
     background: rgba(0, 166, 80, 0.1);
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
     border-left: 0.25rem solid #00A650;
   }
 
@@ -166,14 +166,14 @@
   /* Buttons */
   .mpesa-btn {
     width: 100%;
-    padding: 1rem;
+    padding: 0.8rem;
     border: none;
-    border-radius: 0.75rem;
-    font-size: 1rem;
+    border-radius: 0.6rem;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
     position: relative;
     overflow: hidden;
   }
@@ -243,9 +243,9 @@
   /* Success State */
   .mpesa-success {
     text-align: center;
-    padding: 1.875rem 1.25rem;
+    padding: 1.5rem 1rem;
     background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
-    border-radius: 1rem;
+    border-radius: 0.75rem;
     border: 2px solid #00A650;
   }
 
@@ -255,9 +255,9 @@
   }
 
   .success-icon {
-    font-size: 4rem;
+    font-size: 3.5rem;
     color: #00A650;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
     animation: bounce 0.6s ease-in-out;
   }
 
@@ -269,15 +269,15 @@
 
   .mpesa-success h3 {
     color: #00A650;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.4rem;
     font-weight: 600;
   }
 
   .mpesa-success p {
-    margin: 0.5rem 0;
+    margin: 0.4rem 0;
     color: #4a5568;
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .dark-mode .mpesa-success p {

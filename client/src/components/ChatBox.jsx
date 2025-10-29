@@ -63,7 +63,10 @@ const ChatBox = ({ otherUserId, otherUserName, onClose }) => {
 
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
+    // Adjust for East Africa Time (UTC+3)
+    date.setHours(date.getHours() + 3);
     const now = new Date();
+    now.setHours(now.getHours() + 3);
     const diff = now - date;
 
     if (diff < 60000) { // Less than 1 minute

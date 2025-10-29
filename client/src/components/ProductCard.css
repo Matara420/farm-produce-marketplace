@@ -20,17 +20,17 @@
 
 .product-image {
   width: 100%;
-  height: 120px; /* Reduced from 150px */
+  height: 100px; /* Further reduced for professional look */
   object-fit: cover;
 }
 
 .product-info {
-  padding: 12px; /* Reduced from 15px */
+  padding: 10px; /* Further reduced for compactness */
 }
 
 .product-name {
-  margin: 0 0 4px 0; /* Reduced */
-  font-size: 1rem; /* Reduced from 1.2rem */
+  margin: 0 0 3px 0; /* Further reduced */
+  font-size: 0.95rem; /* Slightly smaller for professionalism */
   color: #333;
   font-weight: 600;
 }
@@ -40,8 +40,8 @@
 }
 
 .product-farmer {
-  margin: 0 0 8px 0; /* Reduced */
-  font-size: 0.8rem; /* Reduced */
+  margin: 0 0 6px 0; /* Further reduced */
+  font-size: 0.75rem; /* Smaller for compactness */
   color: #666;
 }
 
@@ -50,8 +50,8 @@
 }
 
 .product-description {
-  margin: 0 0 12px 0; /* Reduced */
-  font-size: 0.8rem; /* Reduced */
+  margin: 0 0 10px 0; /* Further reduced */
+  font-size: 0.75rem; /* Smaller for professionalism */
   color: #777;
   line-height: 1.3;
 }
@@ -64,17 +64,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px; /* Reduced */
+  margin-bottom: 10px; /* Further reduced */
 }
 
 .product-price {
-  font-size: 1.1rem; /* Reduced from 1.3rem */
+  font-size: 1rem; /* Slightly smaller for balance */
   font-weight: bold;
   color: #4CAF50;
 }
 
 .product-stock {
-  font-size: 0.8rem; /* Reduced */
+  font-size: 0.75rem; /* Smaller for consistency */
   color: #666;
 }
 
@@ -84,16 +84,16 @@
 
 .add-to-cart-btn {
   width: 100%;
-  padding: 8px; /* Reduced from 10px */
+  padding: 7px; /* Slightly reduced */
   background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 0.9rem; /* Reduced */
+  font-size: 0.85rem; /* Smaller for professionalism */
   cursor: pointer;
   transition: background-color 0.3s;
   font-weight: 500;
-  margin-bottom: 8px; /* Add spacing between buttons */
+  margin-bottom: 6px; /* Reduced spacing */
 }
 
 .add-to-cart-btn:hover:not(:disabled) {
@@ -110,17 +110,17 @@
 }
 
 .rating-section {
-  margin-bottom: 12px; /* Reduced */
+  margin-bottom: 10px; /* Further reduced */
 }
 
 .stars {
   display: flex;
-  gap: 1px; /* Reduced from 2px */
-  margin-bottom: 4px; /* Reduced */
+  gap: 1px;
+  margin-bottom: 3px; /* Further reduced */
 }
 
 .star {
-  font-size: 1rem; /* Reduced from 1.2rem */
+  font-size: 0.9rem; /* Smaller for compactness */
   color: #ddd;
   cursor: pointer;
   transition: color 0.2s;
@@ -135,7 +135,7 @@
 }
 
 .rating-text {
-  font-size: 0.75rem; /* Reduced from 0.8rem */
+  font-size: 0.7rem; /* Smaller for better fit */
   color: #666;
 }
 
