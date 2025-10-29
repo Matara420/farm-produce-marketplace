@@ -17,11 +17,11 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await login(formData);
-    if (result.success) {
-      navigate('/marketplace');
-    } else {
-      alert(result.error);
+    try {
+      await login(formData.email, formData.password);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error(error);
     }
   };
 
