@@ -60,26 +60,25 @@ const ProductCard = ({ product }) => {
   // }, [currentUser, product.id]);
 
   return (
-    <div className="product-card">
+    <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-md hover:shadow-xl hover:shadow-green-500/15 transition-all duration-300 hover:-translate-y-1 hover:scale-102 overflow-hidden border-0 max-w-xs">
       <img 
         src={product.image} 
         alt={product.name} 
-        className="product-image" 
+        className="w-full h-28 object-cover" 
         loading="lazy"
       />
-      <div className="product-info">
-        <h3 className="product-name">{product.name}</h3>
-        <p className="product-farmer">
+      <div className="p-2.5">
+        <h3 className="text-sm font-semibold text-gray-800 mb-1.5">{product.name}</h3>
+        <p className="text-xs text-gray-600 mb-1.5">
           Farmer: <span
-            className="farmer-link"
+            className="text-green-600 hover:text-green-700 cursor-pointer underline font-medium"
             onClick={() => navigate(`/farmer-profile/${product.farmer_id}`)}
-            style={{ cursor: 'pointer', color: '#4CAF50', textDecoration: 'underline' }}
           >
             {product.farmer}
           </span>
           {currentUser && currentUser.role === 'buyer' && currentUser.id !== product.farmer_id && (
             <button
-              className="chat-btn"
+              className="ml-1 text-blue-500 hover:text-blue-600 transition-colors text-xs"
               onClick={() => navigate(`/chat/${product.farmer_id}`)}
               title="Chat with farmer"
             >
@@ -87,19 +86,21 @@ const ProductCard = ({ product }) => {
             </button>
           )}
         </p>
-        <p className="product-description">{product.description}</p>
-        <div className="product-details">
-          <span className="product-price">KSh {price.toFixed(2)}</span>
-          <span className="product-stock">Stock: {product.stock}</span>
+        <p className="text-xs text-gray-600 mb-2 line-clamp-2">{product.description}</p>
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-sm font-bold text-green-600">KSh {price.toFixed(2)}</span>
+          <span className="text-xs text-gray-500">Stock: {product.stock}</span>
         </div>
 
         {/* Rating Section */}
-        <div className="rating-section">
-          <div className="stars">
+        <div className="mb-2">
+          <div className="flex gap-0.5 mb-1">
             {[1, 2, 3, 4, 5].map((star) => (
               <span
                 key={star}
-                className={`star ${star <= userRating ? 'filled' : ''}`}
+                className={`text-sm cursor-pointer transition-colors ${
+                  star <= userRating ? 'text-yellow-400' : 'text-gray-300'
+                } hover:text-yellow-400`}
                 onClick={() => handleRating(star)}
                 role="button"
                 tabIndex={0}
@@ -109,7 +110,7 @@ const ProductCard = ({ product }) => {
               </span>
             ))}
           </div>
-          <span className="rating-text">
+          <span className="text-xs text-gray-500">
             {userRating ? `You rated: ${userRating}/5` : `Rate this product`}
           </span>
         </div>
@@ -117,7 +118,11 @@ const ProductCard = ({ product }) => {
         {currentUser && currentUser.role === 'buyer' && (
           <>
             <button
-              className="add-to-cart-btn"
+              className={`w-full py-1.5 px-3 rounded-lg font-medium transition-all duration-300 mb-1.5 text-sm ${
+                product.stock === 0
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 hover:-translate-y-0.5 hover:shadow-md hover:shadow-green-500/30'
+              }`}
               onClick={handleAddToCart}
               disabled={product.stock === 0}
             >
@@ -125,7 +130,7 @@ const ProductCard = ({ product }) => {
             </button>
             
             <button
-              className="review-btn"
+              className="w-full py-1.5 px-3 rounded-lg font-medium bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:shadow-blue-500/30 text-sm"
               onClick={() => setShowReviewForm(!showReviewForm)}
             >
               {showReviewForm ? 'Cancel Review' : 'Write Review'}

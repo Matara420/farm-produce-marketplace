@@ -8,7 +8,7 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   font-size: 14px;
@@ -28,6 +28,30 @@ code {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
+}
+
+/* Professional sizing standards */
+.btn-standard {
+  min-height: 44px; /* Touch-friendly minimum */
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.input-standard {
+  min-height: 44px; /* Touch-friendly minimum */
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+.card-standard {
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Mobile-first responsive design */
@@ -57,19 +81,19 @@ code {
   }
 }
 
-/* Ensure proper scaling on all devices */
+/* Normal professional font scaling */
 html {
   font-size: 14px;
 }
 
 @media (max-width: 768px) {
   html {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
 @media (max-width: 480px) {
   html {
-    font-size: 10px;
+    font-size: 13px;
   }
 }

@@ -13,32 +13,13 @@ const ChatPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (!currentUser) {
-      navigate('/login');
-      return;
-    }
-
-    // Prevent chatting with yourself
-    if (parseInt(userId) === currentUser.id) {
-      setError('You cannot chat with yourself');
-      setLoading(false);
-      return;
-    }
-
-    fetchUserDetails();
-  }, [userId, currentUser, navigate]);
-
-  const fetchUserDetails = async () => {
+  const fetchUserDetails = React.useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      // For now, we'll get user details from the products endpoint
-      // In a real app, you might want a dedicated users endpoint
       const response = await axios.get('/products', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      // Find a product from this user to get their name
       const userProduct = response.data.find(product => product.farmer_id === parseInt(userId));
 
       if (userProduct) {
@@ -47,8 +28,6 @@ const ChatPage = () => {
           name: userProduct.farmer || 'Unknown Farmer'
         });
       } else {
-        // If no products found, try to get from orders or other endpoints
-        // For now, set a generic name
         setOtherUser({
           id: parseInt(userId),
           name: 'User'
@@ -60,7 +39,24 @@ const ChatPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+
+    if (parseInt(userId) === currentUser.id) {
+      setError('You cannot chat with yourself');
+      setLoading(false);
+      return;
+    }
+
+    fetchUserDetails();
+  }, [userId, currentUser, navigate, fetchUserDetails]);
+
+
 
   const handleClose = () => {
     navigate(-1); // Go back to previous page

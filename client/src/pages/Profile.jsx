@@ -123,10 +123,15 @@ const Profile = () => {
             <div className="profile-avatar-section">
               <div className="profile-picture-container">
                 <img
-                  src={currentUser?.profilePicture ? (currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `http://localhost:5000${currentUser.profilePicture}`) : '/placeholder-avatar.png'}
+                  src={
+                    currentUser?.profilePicture 
+                      ? (currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `http://localhost:5000${currentUser.profilePicture}`)
+                      : currentUser?.profile_picture
+                      ? (currentUser.profile_picture.startsWith('http') ? currentUser.profile_picture : `http://localhost:5000${currentUser.profile_picture}`)
+                      : '/placeholder-avatar.png'
+                  }
                   alt="Profile"
                   className="profile-picture"
-                  style={{ width: '120px', height: '120px', objectFit: 'cover', borderRadius: '50%', border: '4px solid #f0f0f0' }}
                   onError={(e) => {
                     e.target.src = '/placeholder-avatar.png';
                   }}

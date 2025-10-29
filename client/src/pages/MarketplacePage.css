@@ -31,13 +31,14 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  padding: 1rem;
+  padding: 1.25rem; /* Professional padding */
   background: white;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 10;
+  min-height: 70px; /* Professional height */
 }
 
 .dark-mode .marketplace-controls {
@@ -52,11 +53,12 @@
 
 .search-input {
   width: 100%;
-  padding: 0.6rem 0.8rem;
+  padding: 0.875rem 1rem; /* Professional padding */
   border: 2px solid #e0e0e0;
   border-radius: 6px;
-  font-size: 0.95rem;
+  font-size: 1rem; /* Professional font size */
   transition: border-color 0.3s ease;
+  min-height: 44px; /* Touch-friendly height */
 }
 
 .search-input:focus {
@@ -91,15 +93,16 @@
 }
 
 .category-select {
-  padding: 0.6rem 0.8rem;
+  padding: 0.875rem 1rem; /* Professional padding */
   border: 2px solid #e0e0e0;
   border-radius: 6px;
-  font-size: 0.95rem;
+  font-size: 1rem; /* Professional font size */
   background: white;
   color: #333;
   cursor: pointer;
   transition: border-color 0.3s ease;
-  min-width: 140px;
+  min-width: 160px; /* Professional width */
+  min-height: 44px; /* Touch-friendly height */
 }
 
 .category-select:focus {

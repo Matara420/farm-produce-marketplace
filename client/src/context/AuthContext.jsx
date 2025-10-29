@@ -32,9 +32,7 @@ export function AuthProvider({ children }) {
 
   const register = async (userData) => {
     try {
-      const response = await axios.post('/register', userData);
-      // Don't auto-login after registration - redirect to login page
-      // Don't auto-login after registration - redirect to login page
+      await axios.post('/register', userData);
       return { success: true };
     } catch (error) {
       return {
@@ -50,6 +48,10 @@ export function AuthProvider({ children }) {
     try {
       const response = await axios.post('/login', credentials);
       const { token, user } = response.data;
+      // Map profile_picture to profilePicture for frontend consistency
+      if (user.profile_picture) {
+        user.profilePicture = user.profile_picture;
+      }
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -71,6 +73,10 @@ export function AuthProvider({ children }) {
   };
 
   const updateUser = (updatedUser) => {
+    // Map profile_picture to profilePicture for frontend consistency
+    if (updatedUser.profile_picture) {
+      updatedUser.profilePicture = updatedUser.profile_picture;
+    }
     setCurrentUser(updatedUser);
     localStorage.setItem('user', JSON.stringify(updatedUser));
   };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -16,7 +16,8 @@ const FarmerDashboard = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  const fetchFarmerStats = React.useCallback(async () => {
+  React.useEffect(() => {
+    const fetchFarmerStats = async () => {
     try {
       const token = localStorage.getItem('token');
       const headers = { 'Authorization': `Bearer ${token}` };
@@ -87,7 +88,10 @@ const FarmerDashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentUser]);
+  };
+
+  fetchFarmerStats();
+}, [currentUser]);
 
   if (!currentUser || currentUser.role !== 'farmer') {
     return null;

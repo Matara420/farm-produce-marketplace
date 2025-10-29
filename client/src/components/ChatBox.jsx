@@ -15,31 +15,37 @@ const ChatBox = ({ otherUserId, otherUserName, onClose }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  useEffect(() => {
-    fetchMessages();
-  }, [otherUserId]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const fetchMessages = async () => {
+  const fetchMessages = React.useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(`/messages/${otherUserId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      setMessages(response.data);
+      setMessages(response.data || []);
     } catch (error) {
       console.error('Error fetching messages:', error);
+      setMessages([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [otherUserId]);
+
+  useEffect(() => {
+    fetchMessages();
+    // Set up polling to keep messages updated
+    const interval = setInterval(fetchMessages, 3000);
+    return () => clearInterval(interval);
+  }, [fetchMessages]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim() || sending) return;
+    if (!newMessage.trim() || sending || !currentUser) return;
 
     setSending(true);
     try {
@@ -51,8 +57,9 @@ const ChatBox = ({ otherUserId, otherUserName, onClose }) => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      setMessages(prev => [...prev, response.data]);
+      setMessages(prev => [...(prev || []), response.data]);
       setNewMessage('');
+      // Don't clear messages - keep them persistent
     } catch (error) {
       console.error('Error sending message:', error);
       alert('Failed to send message. Please try again.');
@@ -99,7 +106,7 @@ const ChatBox = ({ otherUserId, otherUserName, onClose }) => {
     <div className="chat-box">
       <div className="chat-header">
         <h3>Chat with {otherUserName}</h3>
-        <button onClick={onClose} className="close-btn">×</button>
+        <button onClick={onClose} className="close-btn" type="button">×</button>
       </div>
 
       <div className="chat-messages">
@@ -108,10 +115,10 @@ const ChatBox = ({ otherUserId, otherUserName, onClose }) => {
             <p>No messages yet. Start the conversation!</p>
           </div>
         ) : (
-          messages.map((message) => (
+          messages.filter(message => message && message.id).map((message) => (
             <div
               key={message.id}
-              className={`message ${message.sender_id === currentUser.id ? 'sent' : 'received'}`}
+              className={`message ${message.sender_id === currentUser?.id ? 'sent' : 'received'}`}
             >
               <div className="message-content">
                 <p>{message.content}</p>

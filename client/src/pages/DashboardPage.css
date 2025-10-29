@@ -57,12 +57,14 @@
 .product-form input,
 .product-form select,
 .product-form textarea {
-  padding: 0.75rem;
+  padding: 0.875rem; /* Professional padding */
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 6px; /* Professional border radius */
   font-size: 1rem;
   background: white;
   color: #333;
+  min-height: 44px; /* Touch-friendly height */
+  transition: border-color 0.3s ease; /* Professional transition */
 }
 
 .image-upload-section {
@@ -113,14 +115,16 @@
 
 .product-form button {
   grid-column: span 2;
-  padding: 0.75rem;
+  padding: 1rem; /* Professional padding */
   background-color: #4CAF50;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px; /* Professional border radius */
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease; /* Professional transition */
+  min-height: 48px; /* Professional button height */
+  font-weight: 600; /* Professional weight */
 }
 
 .product-form button:hover {
@@ -332,10 +336,11 @@
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-weight: 500;
+  font-weight: 600;
+  min-height: 40px;
 }
 
 .action-btn.primary {
@@ -354,6 +359,126 @@
 
 .action-btn.secondary:hover {
   background-color: #1976D2;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.dark-mode .modal-content {
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dark-mode .modal-header {
+  border-bottom-color: #444;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.dark-mode .modal-header h3 {
+  color: #e0e0e0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark-mode .close-btn {
+  color: #ccc;
+}
+
+.modal-content form {
+  padding: 1.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.cancel-btn, .submit-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+.submit-btn {
+  background: #4CAF50;
+  color: white;
+}
+
+.submit-btn:hover {
+  background: #45a049;
+}
+
+.submit-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.dark-mode .cancel-btn {
+  background: #444;
+  color: #e0e0e0;
+}
+
+.dark-mode .cancel-btn:hover {
+  background: #555;
 }
 
 /* Professional Profile Page Styles */
@@ -484,9 +609,10 @@
 
 .profile-actions {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   justify-content: center;
   flex-wrap: wrap;
+  margin-top: 2rem;
 }
 
 @media (max-width: 768px) {

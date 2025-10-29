@@ -56,9 +56,16 @@ const FarmerProfile = () => {
       <div className="profile-header">
         <div className="farmer-info">
           <img
-            src={farmer.profile_picture || '/placeholder-avatar.png'}
+            src={
+              farmer.profile_picture 
+                ? (farmer.profile_picture.startsWith('http') ? farmer.profile_picture : `http://localhost:5000${farmer.profile_picture}`)
+                : '/placeholder-avatar.png'
+            }
             alt={farmer.name}
             className="farmer-avatar"
+            onError={(e) => {
+              e.target.src = '/placeholder-avatar.png';
+            }}
           />
           <div className="farmer-details">
             <h1>{farmer.name}</h1>

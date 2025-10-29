@@ -14,7 +14,7 @@ import {
   PlusCircle,
   History
 } from 'lucide-react';
-import './Sidebar.css';
+// Removed CSS import - using pure Tailwind
 
 const Sidebar = ({ isOpen, onClose }) => {
   const { currentUser, logout } = useAuth();
@@ -29,51 +29,41 @@ const Sidebar = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="sidebar-overlay" onClick={onClose}>
-      <div className="sidebar" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/50 z-[9999]" onClick={onClose}>
+      <div className="fixed top-0 left-0 w-64 bg-white h-full shadow-xl overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         {/* User Profile Section */}
-        <div className="sidebar-user-section">
-          {currentUser?.profilePicture ? (
-            <img
-              src={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `http://localhost:5000${currentUser.profilePicture}`}
-              alt="Profile"
-              className="sidebar-profile-pic"
-              style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }}
-              onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'flex';
-              }}
-            />
-          ) : null}
-          {!currentUser?.profilePicture && (
-            <div className="sidebar-profile-placeholder">
-              <span>{currentUser?.name?.charAt(0).toUpperCase()}</span>
-            </div>
-          )}
-          <div className="sidebar-user-info">
-            <span className="sidebar-user-name">Hello, {currentUser?.name}</span>
-            <span className="sidebar-user-role">{currentUser?.role}</span>
+        <div className="p-4 border-b border-gray-200 flex items-center gap-3 bg-white">
+          <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-semibold">
+            <span>{currentUser?.name?.charAt(0).toUpperCase()}</span>
+          </div>
+          <div>
+            <div className="font-semibold text-gray-800 text-sm">Hello, {currentUser?.name}</div>
+            <div className="bg-green-500 text-white px-2 py-1 rounded text-xs capitalize">{currentUser?.role}</div>
           </div>
         </div>
 
         {/* Navigation Links */}
-        <nav className="sidebar-nav">
+        <nav className="flex-1 py-2 bg-white">
           <Link 
             to="/marketplace" 
-            className={`sidebar-link ${location.pathname === '/marketplace' ? 'active' : ''}`}
+            className={`flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors ${
+              location.pathname === '/marketplace' ? 'bg-green-50 text-green-700 border-r-2 border-green-500' : ''
+            }`}
             onClick={onClose}
           >
-            <Home size={20} />
-            <span>Marketplace</span>
+            <Home size={18} />
+            <span className="text-sm">Marketplace</span>
           </Link>
 
           <Link 
             to="/dashboard" 
-            className={`sidebar-link ${location.pathname === '/dashboard' ? 'active' : ''}`}
+            className={`flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors ${
+              location.pathname === '/dashboard' ? 'bg-green-50 text-green-700 border-r-2 border-green-500' : ''
+            }`}
             onClick={onClose}
           >
-            <BarChart3 size={20} />
-            <span>Dashboard</span>
+            <BarChart3 size={18} />
+            <span className="text-sm">Dashboard</span>
           </Link>
 
           {/* Farmer-specific links */}
@@ -81,20 +71,35 @@ const Sidebar = ({ isOpen, onClose }) => {
             <>
               <Link 
                 to="/add-product" 
-                className={`sidebar-link ${location.pathname === '/add-product' ? 'active' : ''}`}
+                className={`flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors ${
+                  location.pathname === '/add-product' ? 'bg-green-50 text-green-700 border-r-2 border-green-500' : ''
+                }`}
                 onClick={onClose}
               >
-                <PlusCircle size={20} />
-                <span>Add Product</span>
+                <PlusCircle size={18} />
+                <span className="text-sm">Add Product</span>
               </Link>
 
               <Link 
                 to="/my-products" 
-                className={`sidebar-link ${location.pathname === '/my-products' ? 'active' : ''}`}
+                className={`flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors ${
+                  location.pathname === '/my-products' ? 'bg-green-50 text-green-700 border-r-2 border-green-500' : ''
+                }`}
                 onClick={onClose}
               >
-                <Package size={20} />
-                <span>My Products</span>
+                <Package size={18} />
+                <span className="text-sm">My Products</span>
+              </Link>
+
+              <Link 
+                to="/messages" 
+                className={`flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors ${
+                  location.pathname === '/messages' ? 'bg-green-50 text-green-700 border-r-2 border-green-500' : ''
+                }`}
+                onClick={onClose}
+              >
+                <History size={18} />
+                <span className="text-sm">Messages</span>
               </Link>
             </>
           )}
@@ -104,50 +109,56 @@ const Sidebar = ({ isOpen, onClose }) => {
             <>
               <Link 
                 to="/orders" 
-                className={`sidebar-link ${location.pathname === '/orders' ? 'active' : ''}`}
+                className={`flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors ${
+                  location.pathname === '/orders' ? 'bg-green-50 text-green-700 border-r-2 border-green-500' : ''
+                }`}
                 onClick={onClose}
               >
-                <ShoppingCart size={20} />
-                <span>My Orders</span>
+                <ShoppingCart size={18} />
+                <span className="text-sm">My Orders</span>
               </Link>
 
               <Link 
                 to="/order-history" 
-                className={`sidebar-link ${location.pathname === '/order-history' ? 'active' : ''}`}
+                className={`flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors ${
+                  location.pathname === '/order-history' ? 'bg-green-50 text-green-700 border-r-2 border-green-500' : ''
+                }`}
                 onClick={onClose}
               >
-                <History size={20} />
-                <span>Order History</span>
+                <History size={18} />
+                <span className="text-sm">Order History</span>
               </Link>
             </>
           )}
 
           <Link 
             to="/profile" 
-            className={`sidebar-link ${location.pathname === '/profile' ? 'active' : ''}`}
+            className={`flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors ${
+              location.pathname === '/profile' ? 'bg-green-50 text-green-700 border-r-2 border-green-500' : ''
+            }`}
             onClick={onClose}
           >
-            <User size={20} />
-            <span>Profile</span>
+            <User size={18} />
+            <span className="text-sm">Profile</span>
           </Link>
         </nav>
 
-        {/* Bottom Actions - FIX 3 & 4: Added logout and theme toggle */}
-        <div className="sidebar-actions">
+        {/* Bottom Actions */}
+        <div className="p-4 border-t border-gray-200 space-y-2">
           <button 
-            className="sidebar-action-btn"
+            className="flex items-center gap-3 px-3 py-2 w-full text-gray-700 hover:bg-gray-100 rounded transition-colors"
             onClick={toggleTheme}
           >
-            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-            <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
+            {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+            <span className="text-sm">{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
           </button>
 
           <button 
-            className="sidebar-action-btn logout-btn"
+            className="flex items-center gap-3 px-3 py-2 w-full text-red-600 hover:bg-red-50 rounded transition-colors"
             onClick={handleLogout}
           >
-            <LogOut size={20} />
-            <span>Logout</span>
+            <LogOut size={18} />
+            <span className="text-sm">Logout</span>
           </button>
         </div>
       </div>
