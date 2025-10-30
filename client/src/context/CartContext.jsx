@@ -5,22 +5,30 @@ const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    const saved = localStorage.getItem('cart');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const addToCart = (product) => {
-    setCart(prev => {
-      const existing = prev.find(item => item.id === product.id);
-      if (existing) {
-        return prev.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-      return [...prev, { ...product, quantity: 1 }];
-    });
+    const newCart = cart.slice();
+    const existing = newCart.find(item => item.id === product.id);
+    const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
+    
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      newCart.push({ ...product, price, quantity: 1 });
+    }
+    
+    setCart(newCart);
+    localStorage.setItem('cart', JSON.stringify(newCart));
   };
 
   const removeFromCart = (id) => {
-    setCart(prev => prev.filter(item => item.id !== id));
+    const newCart = cart.filter(item => item.id !== id);
+    setCart(newCart);
+    localStorage.setItem('cart', JSON.stringify(newCart));
   };
 
   const updateQuantity = (id, quantity) => {
@@ -28,12 +36,17 @@ export const CartProvider = ({ children }) => {
       removeFromCart(id);
       return;
     }
-    setCart(prev => prev.map(item =>
+    const newCart = cart.map(item =>
       item.id === id ? { ...item, quantity } : item
-    ));
+    );
+    setCart(newCart);
+    localStorage.setItem('cart', JSON.stringify(newCart));
   };
 
-  const clearCart = () => setCart([]);
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem('cart');
+  };
 
   const getTotalPrice = () => cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 

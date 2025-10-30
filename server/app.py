@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.sql import func
 from models import db, User, Product, Order, Rating, Message, order_product
 import os
+import time
 from dotenv import load_dotenv
 from datetime import timedelta
 
@@ -20,7 +21,9 @@ migrate = Migrate(app, db)
 CORS(app)
 jwt = JWTManager(app)
 
-# Routes
+# Ensure uploads directory exists
+os.makedirs('uploads', exist_ok=True)
+
 @app.route('/')
 def home():
     return jsonify({'message': 'Farm Produce Marketplace API'})
@@ -204,22 +207,19 @@ def create_order():
         order = Order(
             buyer_id=user_id,
             total_amount=total_amount,
-            status='confirmed'  # Changed from 'pending' to 'confirmed' since payment succeeded
+            status='confirmed'
         )
         db.session.add(order)
         db.session.flush()  # Get order ID
 
         # Add products to order and update stock
         for product, quantity in products_to_order:
-            # Add to order_product table using raw SQL
             insert_stmt = order_product.insert().values(
                 order_id=order.id,
                 product_id=product.id,
                 quantity=quantity
             )
             db.session.execute(insert_stmt)
-
-            # Update product stock
             product.stock -= quantity
 
         db.session.commit()
@@ -239,7 +239,6 @@ def get_orders():
         if user.role == 'buyer':
             orders = Order.query.filter_by(buyer_id=user_id).all()
         else:  # farmer
-            # Get orders that contain products from this farmer
             orders = Order.query.join(order_product).join(Product).filter(
                 Product.farmer_id == user_id
             ).distinct().all()
@@ -257,7 +256,6 @@ def update_order(id):
         user_id = get_jwt_identity()
         user = User.query.get(user_id)
         
-        # Check if user is the farmer of any product in this order
         if user.role == 'farmer':
             farmer_products = any(product.farmer_id == user_id for product in order.order_products)
             if not farmer_products:
@@ -275,18 +273,16 @@ def update_order(id):
 
 @app.route('/ratings', methods=['GET', 'POST'])
 @jwt_required()
-def get_ratings():
+def manage_ratings():
     try:
         user_id = get_jwt_identity()
         user = User.query.get(user_id)
 
         if request.method == 'GET':
-            # Get ratings - buyers see their own ratings, farmers see ratings for their products
             if user.role == 'buyer':
                 ratings = Rating.query.filter_by(buyer_id=user_id).all()
             else:  # farmer
                 ratings = Rating.query.filter_by(farmer_id=user_id).all()
-
             return jsonify([rating.to_dict() for rating in ratings])
 
         elif request.method == 'POST':
@@ -317,52 +313,14 @@ def get_ratings():
 
             db.session.add(rating)
             db.session.commit()
-
             return jsonify(rating.to_dict()), 201
 
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
-    try:
-        user_id = get_jwt_identity()
-        user = User.query.get(user_id)
-        
-        if user.role != 'buyer':
-            return jsonify({'message': 'Only buyers can submit ratings'}), 403
-        
-        data = request.get_json()
-        if not all(k in data for k in ['farmer_id', 'product_id', 'score']):
-            return jsonify({'message': 'Missing required fields'}), 400
-        
-        # Check if buyer has purchased this product
-        order = Order.query.join(order_product).filter(
-            Order.buyer_id == user_id,
-            Order.status == 'delivered',
-            order_product.c.product_id == data['product_id']
-        ).first()
-        
-        if not order:
-            return jsonify({'message': 'You can only rate products you have purchased'}), 403
-        
-        rating = Rating(
-            buyer_id=user_id,
-            farmer_id=data['farmer_id'],
-            product_id=data['product_id'],
-            score=data['score'],
-            comment=data.get('comment', '')
-        )
-        
-        db.session.add(rating)
-        db.session.commit()
-        
-        return jsonify(rating.to_dict()), 201
-        
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
 @app.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
     try:
-        # Get farmers with ratings
         leaderboard = db.session.query(
             User.id.label('farmer_id'),
             User.name,
@@ -374,7 +332,6 @@ def get_leaderboard():
          .order_by(func.avg(Rating.score).desc()) \
          .all()
 
-        # Get order counts separately
         order_counts = db.session.query(
             Product.farmer_id,
             func.count(Order.id.distinct()).label('order_count')
@@ -391,7 +348,7 @@ def get_leaderboard():
             result.append({
                 'farmer_id': row.farmer_id,
                 'name': row.name,
-                'avg_rating': round(float(row.avg_rating or 0) / 2, 1),  # Convert 1-10 to 1-5
+                'avg_rating': round(float(row.avg_rating or 0) / 2, 1),
                 'order_count': order_count_dict.get(row.farmer_id, 0)
             })
 
@@ -424,7 +381,7 @@ def get_certificate_eligibility():
 
 @app.route('/users/profile', methods=['GET', 'PUT'])
 @jwt_required()
-def get_profile():
+def manage_profile():
     try:
         user_id = get_jwt_identity()
         user = User.query.get(user_id)
@@ -433,7 +390,6 @@ def get_profile():
             return jsonify(user.to_dict())
 
         elif request.method == 'PUT':
-            # Handle form data for file uploads
             if request.content_type and 'multipart/form-data' in request.content_type:
                 name = request.form.get('name')
                 email = request.form.get('email')
@@ -442,19 +398,17 @@ def get_profile():
                 if name:
                     user.name = name
                 if email:
-                    # Check if email is already taken by another user
                     existing_user = User.query.filter_by(email=email).first()
                     if existing_user and existing_user.id != user_id:
                         return jsonify({'message': 'Email already exists'}), 400
                     user.email = email
 
                 if profile_picture_file:
-                    # Save the uploaded file (you might want to use a proper file storage solution)
-                    filename = f"user_{user_id}_profile.jpg"
-                    profile_picture_file.save(os.path.join('uploads', filename))
+                    filename = f"user_{user_id}_{int(time.time())}.jpg"
+                    file_path = os.path.join('uploads', filename)
+                    profile_picture_file.save(file_path)
                     user.profile_picture = f"/uploads/{filename}"
             else:
-                # Handle JSON data
                 data = request.get_json()
                 if 'name' in data:
                     user.name = data['name']
@@ -468,49 +422,6 @@ def get_profile():
 
             db.session.commit()
             return jsonify(user.to_dict())
-
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'message': str(e)}), 500
-    try:
-        user_id = get_jwt_identity()
-        user = User.query.get(user_id)
-
-        # Handle form data for file uploads
-        if request.content_type and 'multipart/form-data' in request.content_type:
-            name = request.form.get('name')
-            email = request.form.get('email')
-            profile_picture_file = request.files.get('profile_picture')
-
-            if name:
-                user.name = name
-            if email:
-                # Check if email is already taken by another user
-                existing_user = User.query.filter_by(email=email).first()
-                if existing_user and existing_user.id != user_id:
-                    return jsonify({'message': 'Email already exists'}), 400
-                user.email = email
-
-            if profile_picture_file:
-                # Save the uploaded file (you might want to use a proper file storage solution)
-                filename = f"user_{user_id}_profile.jpg"
-                profile_picture_file.save(os.path.join('uploads', filename))
-                user.profile_picture = f"/uploads/{filename}"
-        else:
-            # Handle JSON data
-            data = request.get_json()
-            if 'name' in data:
-                user.name = data['name']
-            if 'email' in data:
-                existing_user = User.query.filter_by(email=data['email']).first()
-                if existing_user and existing_user.id != user_id:
-                    return jsonify({'message': 'Email already exists'}), 400
-                user.email = data['email']
-            if 'profile_picture' in data:
-                user.profile_picture = data['profile_picture']
-
-        db.session.commit()
-        return jsonify(user.to_dict())
 
     except Exception as e:
         db.session.rollback()
@@ -556,12 +467,10 @@ def send_message():
         if not all(k in data for k in ['receiver_id', 'content']):
             return jsonify({'message': 'Missing receiver_id or content'}), 400
 
-        # Validate receiver exists
         receiver = User.query.get(data['receiver_id'])
         if not receiver:
             return jsonify({'message': 'Receiver not found'}), 404
 
-        # Prevent self-messaging
         if sender_id == data['receiver_id']:
             return jsonify({'message': 'Cannot send message to yourself'}), 400
 
@@ -573,7 +482,6 @@ def send_message():
 
         db.session.add(message)
         db.session.commit()
-
         return jsonify(message.to_dict()), 201
 
     except Exception as e:
@@ -585,13 +493,10 @@ def send_message():
 def get_messages(user_id):
     try:
         current_user_id = get_jwt_identity()
-
-        # Validate the other user exists
         other_user = User.query.get(user_id)
         if not other_user:
             return jsonify({'message': 'User not found'}), 404
 
-        # Get all messages between current user and the specified user
         messages = Message.query.filter(
             ((Message.sender_id == current_user_id) & (Message.receiver_id == user_id)) |
             ((Message.sender_id == user_id) & (Message.receiver_id == current_user_id))
@@ -618,7 +523,6 @@ def get_conversations():
     try:
         user_id = get_jwt_identity()
 
-        # Get all users the current user has messaged with
         sent_messages = db.session.query(Message.receiver_id).filter(Message.sender_id == user_id).distinct()
         received_messages = db.session.query(Message.sender_id).filter(Message.receiver_id == user_id).distinct()
 
@@ -653,10 +557,8 @@ def get_farmer_profile(farmer_id):
         if not farmer:
             return jsonify({'message': 'Farmer not found'}), 404
 
-        # Get farmer's products
         products = Product.query.filter_by(farmer_id=farmer_id).all()
 
-        # Calculate products sold (delivered orders count)
         products_sold = db.session.query(func.sum(order_product.c.quantity)).join(
             Order, Order.id == order_product.c.order_id
         ).filter(
@@ -664,16 +566,13 @@ def get_farmer_profile(farmer_id):
             order_product.c.product_id.in_([p.id for p in products])
         ).scalar() or 0
 
-        # Calculate products on market (total stock across all products)
         products_on_market = sum(product.stock for product in products)
 
-        # Get farmer's ratings and calculate average
         ratings = Rating.query.filter_by(farmer_id=farmer_id).all()
         avg_rating = 0
         if ratings:
-            avg_rating = sum(r.score for r in ratings) / len(ratings) / 2  # Convert to 1-5 scale
+            avg_rating = sum(r.score for r in ratings) / len(ratings) / 2
 
-        # Get farmer's products with details
         farmer_products = [{
             'id': p.id,
             'name': p.name,
@@ -684,11 +583,10 @@ def get_farmer_profile(farmer_id):
             'description': p.description
         } for p in products]
 
-        # Get farmer's ratings with buyer details
         farmer_ratings = [{
             'id': r.id,
             'buyer_name': r.buyer.name,
-            'score': r.score / 2,  # Convert to 1-5 scale
+            'score': r.score / 2,
             'comment': r.comment,
             'created_at': r.created_at.isoformat() if r.created_at else None
         } for r in ratings]

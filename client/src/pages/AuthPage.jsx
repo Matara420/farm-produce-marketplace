@@ -53,28 +53,43 @@ const AuthPage = () => {
     }
   };
 
+  const validateForm = () => {
+    if (isSignUp && !formData.fullName.trim()) {
+      setError('Full name is required');
+      return false;
+    }
+    if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) {
+      setError('Valid email is required');
+      return false;
+    }
+    if (!formData.password || formData.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     setError('');
+    
+    if (!validateForm()) return;
+    
+    setIsLoading(true);
 
     try {
       let result;
       
       if (isSignUp) {
-        // For sign up
-        const userData = new FormData();
-        userData.append('fullName', formData.fullName);
-        userData.append('email', formData.email);
-        userData.append('password', formData.password);
-        userData.append('role', formData.role);
-        if (formData.profilePicture) {
-          userData.append('profilePicture', formData.profilePicture);
-        }
+        const userData = {
+          name: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role
+        };
         
         result = await register(userData);
       } else {
-        // For sign in
         result = await login({
           email: formData.email,
           password: formData.password
@@ -82,7 +97,6 @@ const AuthPage = () => {
       }
 
       if (result.success) {
-        // Success - redirect or show success message
         console.log(`${isSignUp ? 'Registration' : 'Login'} successful!`);
       } else {
         setError(result.error || `Something went wrong during ${isSignUp ? 'registration' : 'login'}`);

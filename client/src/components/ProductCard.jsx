@@ -21,8 +21,9 @@ const ProductCard = ({ product }) => {
 
   const handleRating = (newRating) => {
     setUserRating(newRating);
-    // In real app, this would submit to backend
-    console.log(`Rated product ${product.id} with ${newRating} stars`);
+    // Convert 1-5 scale to 1-10 for backend
+    const backendRating = newRating * 2;
+    console.log(`Rated product ${product.id} with ${newRating} stars (${backendRating}/10 for backend)`);
   };
 
   const handleReviewSubmitted = () => {

@@ -61,31 +61,38 @@ const MpesaPayment = ({ total, onSuccess }) => {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-auto overflow-hidden">
-      <div className="bg-gradient-to-r from-green-600 to-green-700 p-6 text-center">
-        <div className="text-2xl font-bold text-white mb-2">M-PESA</div>
-        <h3 className="text-white text-lg font-medium">Lipa na M-Pesa</h3>
+    <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 sm:mx-auto overflow-hidden">
+      <div className="bg-gradient-to-r from-green-600 to-green-700 p-4 sm:p-6 text-center">
+        <div className="text-xl sm:text-2xl font-bold text-white mb-2">M-PESA</div>
+        <h3 className="text-white text-base sm:text-lg font-medium">Lipa na M-Pesa</h3>
       </div>
       
       {step === 'input' ? (
-        <div className="p-6">
-          <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Enter your M-Pesa number:</label>
+        <div className="p-4 sm:p-6">
+          <div className="mb-4 sm:mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 sm:mb-3">Enter your M-Pesa number:</label>
             <input
               type="tel"
               placeholder="07XXXXXXXX or 2547XXXXXXXX"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors text-gray-800 placeholder-gray-400"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors text-gray-800 placeholder-gray-400 text-sm sm:text-base"
               onKeyPress={(e) => e.key === 'Enter' && handleContinue()}
             />
           </div>
           <button 
             onClick={handleContinue}
-            disabled={!phone}
-            className="w-full py-3 px-6 bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold rounded-xl hover:from-green-700 hover:to-green-800 transition-all duration-300 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+            disabled={!phone || loading}
+            className="w-full py-2 sm:py-3 px-4 sm:px-6 bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold rounded-xl hover:from-green-700 hover:to-green-800 transition-all duration-300 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed shadow-lg hover:shadow-xl text-sm sm:text-base flex items-center justify-center"
           >
-            Continue
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Loading...
+              </>
+            ) : (
+              'Continue'
+            )}
           </button>
         </div>
       ) : (

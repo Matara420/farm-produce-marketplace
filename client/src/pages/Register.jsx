@@ -98,21 +98,19 @@ const Register = () => {
           </div>
           <div className="form-group">
             <label htmlFor="profilePicture">Profile Picture (Optional)</label>
-            <div className="file-input-container">
-              <input
-                type="file"
-                id="profilePicture"
-                name="profilePicture"
-                accept="image/*"
-                onChange={handleChange}
-                className="file-input"
-              />
-              {preview && (
-                <div className="image-preview">
-                  <img src={preview} alt="Profile preview" />
-                </div>
-              )}
-            </div>
+            <input
+              type="file"
+              id="profilePicture"
+              name="profilePicture"
+              accept="image/*"
+              onChange={handleChange}
+              className="file-input"
+            />
+            {preview && (
+              <div className="image-preview">
+                <img src={preview} alt="Profile preview" />
+              </div>
+            )}
           </div>
           <button type="submit" className="auth-btn">Create Account</button>
         </form>

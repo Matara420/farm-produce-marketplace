@@ -15,7 +15,12 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
-      setCurrentUser(JSON.parse(savedUser));
+      const user = JSON.parse(savedUser);
+      // Standardize profile picture field
+      if (user.profile_picture && !user.profilePicture) {
+        user.profilePicture = user.profile_picture;
+      }
+      setCurrentUser(user);
     }
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -23,17 +28,15 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    }
-  }, []);
-
   const register = async (userData) => {
     try {
-      await axios.post('/register', userData);
-      return { success: true };
+      const response = await axios.post('/register', userData);
+      const user = response.data.user;
+      // Standardize profile picture field
+      if (user.profile_picture) {
+        user.profilePicture = user.profile_picture;
+      }
+      return { success: true, user };
     } catch (error) {
       return {
         success: false,
@@ -42,13 +45,11 @@ export function AuthProvider({ children }) {
     }
   };
 
-
-
   const login = async (credentials) => {
     try {
       const response = await axios.post('/login', credentials);
       const { token, user } = response.data;
-      // Map profile_picture to profilePicture for frontend consistency
+      // Standardize profile picture field
       if (user.profile_picture) {
         user.profilePicture = user.profile_picture;
       }
@@ -73,29 +74,13 @@ export function AuthProvider({ children }) {
   };
 
   const updateUser = (updatedUser) => {
-    // Map profile_picture to profilePicture for frontend consistency
-    if (updatedUser.profile_picture) {
-      updatedUser.profilePicture = updatedUser.profile_picture;
+    // Standardize profile picture field
+    const user = { ...updatedUser };
+    if (user.profile_picture && !user.profilePicture) {
+      user.profilePicture = user.profile_picture;
     }
-    setCurrentUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-  };
-
-  const addOrder = (cartItems, totalPrice) => {
-    const order = {
-      id: Date.now(),
-      userId: currentUser?.id,
-      items: cartItems,
-      total: totalPrice,
-      date: new Date().toISOString(),
-      status: 'completed'
-    };
-
-    const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-    existingOrders.push(order);
-    localStorage.setItem('orders', JSON.stringify(existingOrders));
-
-    return order;
+    setCurrentUser(user);
+    localStorage.setItem('user', JSON.stringify(user));
   };
 
   const value = {
@@ -104,7 +89,6 @@ export function AuthProvider({ children }) {
     login,
     logout,
     updateUser,
-    addOrder,
     loading
   };
 
