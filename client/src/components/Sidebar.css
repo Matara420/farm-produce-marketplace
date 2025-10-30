@@ -26,11 +26,11 @@
   }
   
   .sidebar-user-section {
-    padding: 1.5rem;
+    padding: 1.2rem;
     border-bottom: 1px solid #e0e0e0;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.8rem;
   }
   
   .dark-mode .sidebar-user-section {
@@ -38,16 +38,16 @@
   }
   
   .sidebar-profile-pic {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #4CAF50;
   }
-  
+
   .sidebar-profile-placeholder {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     background: #f0f0f0;
     display: flex;
@@ -68,7 +68,7 @@
   
   .sidebar-user-name {
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: #333;
   }
   
@@ -88,17 +88,17 @@
   
   .sidebar-nav {
     flex: 1;
-    padding: 1rem 0;
+    padding: 0.8rem 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
   
   .sidebar-link {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.75rem 1.5rem;
+    gap: 0.8rem;
+    padding: 0.6rem 1.2rem;
     color: #666;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -133,11 +133,11 @@
   }
   
   .sidebar-actions {
-    padding: 1rem;
+    padding: 0.8rem;
     border-top: 1px solid #e0e0e0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
   
   .dark-mode .sidebar-actions {
@@ -147,8 +147,8 @@
   .sidebar-action-btn {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.75rem;
+    gap: 0.8rem;
+    padding: 0.6rem;
     background: none;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
@@ -156,7 +156,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     width: 100%;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
   
   .sidebar-action-btn:hover {

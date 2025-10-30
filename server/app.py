@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.sql import func
-from models import db, User, Product, Order, Rating, order_product
+from models import db, User, Product, Order, Rating, Message, order_product
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -546,6 +546,62 @@ def change_password():
 def uploaded_file(filename):
     return send_from_directory('uploads', filename)
 
+@app.route('/messages', methods=['POST'])
+@jwt_required()
+def send_message():
+    try:
+        sender_id = get_jwt_identity()
+        data = request.get_json()
+
+        if not all(k in data for k in ['receiver_id', 'content']):
+            return jsonify({'message': 'Missing receiver_id or content'}), 400
+
+        # Validate receiver exists
+        receiver = User.query.get(data['receiver_id'])
+        if not receiver:
+            return jsonify({'message': 'Receiver not found'}), 404
+
+        # Prevent self-messaging
+        if sender_id == data['receiver_id']:
+            return jsonify({'message': 'Cannot send message to yourself'}), 400
+
+        message = Message(
+            sender_id=sender_id,
+            receiver_id=data['receiver_id'],
+            content=data['content']
+        )
+
+        db.session.add(message)
+        db.session.commit()
+
+        return jsonify(message.to_dict()), 201
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500
+
+@app.route('/messages/<int:user_id>', methods=['GET'])
+@jwt_required()
+def get_messages(user_id):
+    try:
+        current_user_id = get_jwt_identity()
+
+        # Validate the other user exists
+        other_user = User.query.get(user_id)
+        if not other_user:
+            return jsonify({'message': 'User not found'}), 404
+
+        # Get all messages between current user and the specified user
+        messages = Message.query.filter(
+            ((Message.sender_id == current_user_id) & (Message.receiver_id == user_id)) |
+            ((Message.sender_id == user_id) & (Message.receiver_id == current_user_id))
+        ).order_by(Message.timestamp).all()
+
+        return jsonify([message.to_dict() for message in messages])
+
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
 @app.route('/me', methods=['GET'])
 @jwt_required()
 def get_current_user():
@@ -553,6 +609,102 @@ def get_current_user():
         user_id = get_jwt_identity()
         user = User.query.get(user_id)
         return jsonify(user.to_dict())
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
+@app.route('/conversations', methods=['GET'])
+@jwt_required()
+def get_conversations():
+    try:
+        user_id = get_jwt_identity()
+
+        # Get all users the current user has messaged with
+        sent_messages = db.session.query(Message.receiver_id).filter(Message.sender_id == user_id).distinct()
+        received_messages = db.session.query(Message.sender_id).filter(Message.receiver_id == user_id).distinct()
+
+        user_ids = set()
+        for msg in sent_messages:
+            user_ids.add(msg[0])
+        for msg in received_messages:
+            user_ids.add(msg[0])
+
+        conversations = []
+        for other_id in user_ids:
+            other_user = User.query.get(other_id)
+            last_message = Message.query.filter(
+                ((Message.sender_id == user_id) & (Message.receiver_id == other_id)) |
+                ((Message.sender_id == other_id) & (Message.receiver_id == user_id))
+            ).order_by(Message.timestamp.desc()).first()
+
+            conversations.append({
+                'user': other_user.to_dict(),
+                'last_message': last_message.to_dict() if last_message else None
+            })
+
+        return jsonify(conversations)
+
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
+@app.route('/users/farmer/<int:farmer_id>', methods=['GET'])
+def get_farmer_profile(farmer_id):
+    try:
+        farmer = User.query.filter_by(id=farmer_id, role='farmer').first()
+        if not farmer:
+            return jsonify({'message': 'Farmer not found'}), 404
+
+        # Get farmer's products
+        products = Product.query.filter_by(farmer_id=farmer_id).all()
+
+        # Calculate products sold (delivered orders count)
+        products_sold = db.session.query(func.sum(order_product.c.quantity)).join(
+            Order, Order.id == order_product.c.order_id
+        ).filter(
+            Order.status == 'delivered',
+            order_product.c.product_id.in_([p.id for p in products])
+        ).scalar() or 0
+
+        # Calculate products on market (total stock across all products)
+        products_on_market = sum(product.stock for product in products)
+
+        # Get farmer's ratings and calculate average
+        ratings = Rating.query.filter_by(farmer_id=farmer_id).all()
+        avg_rating = 0
+        if ratings:
+            avg_rating = sum(r.score for r in ratings) / len(ratings) / 2  # Convert to 1-5 scale
+
+        # Get farmer's products with details
+        farmer_products = [{
+            'id': p.id,
+            'name': p.name,
+            'price': p.price,
+            'image': p.image,
+            'category': p.category,
+            'stock': p.stock,
+            'description': p.description
+        } for p in products]
+
+        # Get farmer's ratings with buyer details
+        farmer_ratings = [{
+            'id': r.id,
+            'buyer_name': r.buyer.name,
+            'score': r.score / 2,  # Convert to 1-5 scale
+            'comment': r.comment,
+            'created_at': r.created_at.isoformat() if r.created_at else None
+        } for r in ratings]
+
+        return jsonify({
+            'farmer': farmer.to_dict(),
+            'stats': {
+                'products_sold': int(products_sold),
+                'products_on_market': products_on_market,
+                'avg_rating': round(avg_rating, 1),
+                'total_ratings': len(ratings)
+            },
+            'products': farmer_products,
+            'ratings': farmer_ratings
+        })
+
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 

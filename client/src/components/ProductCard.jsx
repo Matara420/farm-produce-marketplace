@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 import ReviewForm from './ReviewForm';
-import axios from 'axios';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
   const { currentUser } = useAuth();
   const { addToCart } = useCart();
+  const navigate = useNavigate();
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [userRating, setUserRating] = useState(0);
   const [canReview, setCanReview] = useState(false);
@@ -29,34 +30,34 @@ const ProductCard = ({ product }) => {
     setUserRating(0); // Reset for demo
   };
 
-  // // Check if user can review this product
-  // useEffect(() => {
-  //   const checkReviewEligibility = async () => {
-  //     if (!currentUser || currentUser.role !== 'buyer') return;
+  // Check if user can review this product
+  useEffect(() => {
+    const checkReviewEligibility = async () => {
+      if (!currentUser || currentUser.role !== 'buyer') return;
 
-  //     try {
-  //       const token = localStorage.getItem('token');
-  //       const response = await axios.get('/orders', {
-  //         headers: {
-  //           'Authorization': `Bearer ${token}`
-  //         }
-  //       });
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('/orders', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
 
-  //       // Check if user has purchased this product
-  //       const hasPurchased = response.data.some(order =>
-  //         order.status === 'delivered' &&
-  //         order.products.some(p => p.id === product.id)
-  //       );
+        // Check if user has purchased this product
+        const hasPurchased = response.data.some(order =>
+          order.status === 'delivered' &&
+          order.products.some(p => p.id === product.id)
+        );
 
-  //       setCanReview(hasPurchased);
-  //     } catch (error) {
-  //       console.error('Error checking review eligibility:', error);
-  //       setCanReview(false);
-  //     }
-  //   };
+        setCanReview(hasPurchased);
+      } catch (error) {
+        console.error('Error checking review eligibility:', error);
+        setCanReview(false);
+      }
+    };
 
-  //   checkReviewEligibility();
-  // }, [currentUser, product.id]);
+    checkReviewEligibility();
+  }, [currentUser, product.id]);
 
   return (
     <div className="product-card">
@@ -68,7 +69,24 @@ const ProductCard = ({ product }) => {
       />
       <div className="product-info">
         <h3 className="product-name">{product.name}</h3>
-        <p className="product-farmer">Farmer: {product.farmer}</p>
+        <p className="product-farmer">
+          Farmer: <span
+            className="farmer-link"
+            onClick={() => navigate(`/farmer-profile/${product.farmer_id}`)}
+            style={{ cursor: 'pointer', color: '#4CAF50', textDecoration: 'underline' }}
+          >
+            {product.farmer}
+          </span>
+          {currentUser && currentUser.role === 'buyer' && currentUser.id !== product.farmer_id && (
+            <button
+              className="chat-btn"
+              onClick={() => navigate(`/chat/${product.farmer_id}`)}
+              title="Chat with farmer"
+            >
+              💬
+            </button>
+          )}
+        </p>
         <p className="product-description">{product.description}</p>
         <div className="product-details">
           <span className="product-price">KSh {price.toFixed(2)}</span>

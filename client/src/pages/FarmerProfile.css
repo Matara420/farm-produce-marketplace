@@ -1,0 +1,394 @@
+.farmer-profile {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 1.875rem;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.875rem;
+}
+
+.dark-mode .profile-header {
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.farmer-info {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* FIXED PROFILE PICTURE STYLES */
+.farmer-avatar {
+  width: 6.25rem;
+  height: 6.25rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 0.1875rem solid #4CAF50;
+  background-color: #f8f9fa;
+  display: block;
+  flex-shrink: 0;
+}
+
+.dark-mode .farmer-avatar {
+  background-color: #333;
+  border-color: #45a049;
+}
+
+/* Fallback for missing profile pictures */
+.farmer-avatar:not([src]),
+.farmer-avatar[src=""],
+.farmer-avatar[src*="undefined"],
+.farmer-avatar[src*="null"] {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.farmer-details h1 {
+  margin: 0 0 0.625rem 0;
+  color: #333;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.dark-mode .farmer-details h1 {
+  color: #e0e0e0;
+}
+
+.farmer-details p {
+  margin: 0.3125rem 0;
+  color: #666;
+}
+
+.dark-mode .farmer-details p {
+  color: #ccc;
+}
+
+.message-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.3125rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+  font-weight: 600;
+}
+
+.message-btn:hover {
+  background: #45a049;
+}
+
+.stats-section {
+  background: white;
+  padding: 1.875rem;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.875rem;
+}
+
+.dark-mode .stats-section {
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.stats-section h2 {
+  margin: 0 0 1.25rem 0;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.dark-mode .stats-section h2 {
+  color: #e0e0e0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
+  gap: 1.25rem;
+}
+
+.stat-card {
+  text-align: center;
+  padding: 1.25rem;
+  background: #f9f9f9;
+  border-radius: 0.5rem;
+  border: 1px solid #e0e0e0;
+}
+
+.dark-mode .stat-card {
+  background: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+.stat-card h3 {
+  margin: 0 0 0.625rem 0;
+  color: #4CAF50;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.stat-card p {
+  margin: 0;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03125rem;
+  font-size: 0.9rem;
+}
+
+.dark-mode .stat-card p {
+  color: #ccc;
+}
+
+.products-section,
+.ratings-section {
+  background: white;
+  padding: 1.875rem;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.875rem;
+}
+
+.dark-mode .products-section,
+.dark-mode .ratings-section {
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.products-section h2,
+.ratings-section h2 {
+  margin: 0 0 1.25rem 0;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.dark-mode .products-section h2,
+.dark-mode .ratings-section h2 {
+  color: #e0e0e0;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+  gap: 1.25rem;
+}
+
+.product-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  background: white;
+}
+
+.dark-mode .product-card {
+  background: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+.product-card:hover {
+  transform: translateY(-0.3125rem);
+  box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+  width: 100%;
+  height: 12.5rem;
+  object-fit: cover;
+  background-color: #f5f5f5;
+}
+
+.dark-mode .product-card img {
+  background-color: #444;
+}
+
+.product-card .product-info {
+  padding: 0.9375rem;
+}
+
+.product-card h3 {
+  margin: 0 0 0.625rem 0;
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.dark-mode .product-card h3 {
+  color: #e0e0e0;
+}
+
+.product-card .category {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0.3125rem 0;
+}
+
+.dark-mode .product-card .category {
+  color: #ccc;
+}
+
+.product-card .price {
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin: 0.3125rem 0;
+}
+
+.product-card .stock {
+  color: #ff9800;
+  font-size: 0.9rem;
+  margin: 0.3125rem 0;
+}
+
+.product-card .description {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0.625rem 0 0 0;
+  line-height: 1.5;
+}
+
+.dark-mode .product-card .description {
+  color: #ccc;
+}
+
+.ratings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9375rem;
+}
+
+.rating-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  background: #fafafa;
+}
+
+.dark-mode .rating-card {
+  background: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+.rating-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.625rem;
+}
+
+.buyer-name {
+  font-weight: bold;
+  color: #333;
+  font-weight: 600;
+}
+
+.dark-mode .buyer-name {
+  color: #e0e0e0;
+}
+
+.stars {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.star {
+  color: #ddd;
+  font-size: 1.2rem;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.rating-date {
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.dark-mode .rating-date {
+  color: #ccc;
+}
+
+.rating-comment {
+  margin: 0.625rem 0 0 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.dark-mode .rating-comment {
+  color: #ccc;
+}
+
+.no-products,
+.no-ratings {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 2.5rem;
+}
+
+.dark-mode .no-products,
+.dark-mode .no-ratings {
+  color: #ccc;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 3.75rem;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #f44336;
+}
+
+.loading {
+  color: #666;
+}
+
+.dark-mode .loading {
+  color: #ccc;
+}
+
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.25rem;
+  }
+
+  .farmer-info {
+    flex-direction: column;
+    gap: 0.9375rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+}
