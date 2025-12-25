@@ -1,0 +1,39 @@
+.product-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: white;
+  height: fit-content;
+}
+
+.dark-mode .product-card {
+  border-color: #444;
+  background: #2a2a2a;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* ... keep existing product card styles ... */
+
+.review-btn {
+  width: 100%;
+  padding: 8px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.review-btn:hover {
+  background-color: #1976D2;
+}
