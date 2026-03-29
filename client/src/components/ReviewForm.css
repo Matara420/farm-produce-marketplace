@@ -1,0 +1,135 @@
+.review-form {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .dark-mode .review-form {
+    background: #333;
+    color: #e0e0e0;
+  }
+
+  .review-form h4 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .dark-mode .review-form h4 {
+    color: #e0e0e0;
+  }
+
+  .rating-section {
+    margin-bottom: 1rem;
+  }
+
+  .rating-section label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .dark-mode .rating-section label {
+    color: #e0e0e0;
+  }
+
+  .star-rating {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .star-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 0;
+  }
+
+  .star-btn.active {
+    color: #ffc107;
+  }
+
+  .star-btn:hover {
+    color: #ffc107;
+    transform: scale(1.1);
+  }
+
+  .rating-text {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .dark-mode .rating-text {
+    color: #ccc;
+  }
+
+  .comment-section {
+    margin-bottom: 1rem;
+  }
+
+  .comment-section label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .dark-mode .comment-section label {
+    color: #e0e0e0;
+  }
+
+  .comment-section textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    resize: vertical;
+    background: white;
+    color: #333;
+    line-height: 1.5;
+  }
+
+  .dark-mode .comment-section textarea {
+    border-color: #555;
+    background: #2a2a2a;
+    color: #e0e0e0;
+  }
+
+  .comment-section textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 0.125rem rgba(76, 175, 80, 0.2);
+  }
+
+  .submit-review-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 600;
+  }
+
+  .submit-review-btn:hover:not(:disabled) {
+    background-color: #45a049;
+  }
+
+  .submit-review-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .dark-mode .submit-review-btn:disabled {
+    background-color: #666;
+  }

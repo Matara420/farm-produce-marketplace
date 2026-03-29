@@ -1,0 +1,636 @@
+.dashboard-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 2rem 0;
+}
+
+.dark-mode .dashboard-page {
+  background-color: #121212;
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.dashboard-container h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.dark-mode .dashboard-container h1 {
+  color: #e0e0e0;
+}
+
+.dashboard-section {
+  background: white;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .dashboard-section {
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.dashboard-section h2 {
+  color: #4CAF50;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.dark-mode .dashboard-section h2 {
+  color: #8BC34A;
+}
+
+.product-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.product-form input,
+.product-form select,
+.product-form textarea {
+  padding: 0.875rem; /* Professional padding */
+  border: 1px solid #ddd;
+  border-radius: 6px; /* Professional border radius */
+  font-size: 1rem;
+  background: white;
+  color: #333;
+  min-height: 44px; /* Touch-friendly height */
+  transition: border-color 0.3s ease; /* Professional transition */
+}
+
+.image-upload-section {
+  margin-bottom: 15px;
+}
+
+.image-upload-section label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.image-upload-section input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  border: 2px dashed #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.image-upload-section input[type="file"]:hover {
+  border-color: #4CAF50;
+  background-color: #f0f8f0;
+}
+
+.upload-note {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.dark-mode .product-form input,
+.dark-mode .product-form select,
+.dark-mode .product-form textarea {
+  border-color: #555;
+  background: #333;
+  color: #e0e0e0;
+}
+
+.product-form textarea {
+  grid-column: span 2;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.product-form button {
+  grid-column: span 2;
+  padding: 1rem; /* Professional padding */
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px; /* Professional border radius */
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Professional transition */
+  min-height: 48px; /* Professional button height */
+  font-weight: 600; /* Professional weight */
+}
+
+.product-form button:hover {
+  background-color: #45a049;
+}
+
+.farmer-dashboard,
+.buyer-dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.user-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .farmer-dashboard {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-picture-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4CAF50;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.earnings-stats,
+.spending-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .stat-card {
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+}
+
+.stat-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.earnings-amount,
+.spent-amount {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.orders-count,
+.products-count {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.favorite-category {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.recent-orders {
+  margin-top: 2rem;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.order-item-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.dark-mode .order-item-mini {
+  background: #333;
+}
+
+.order-item-mini span {
+  flex: 1;
+  text-align: center;
+}
+
+.spending-stats .stat-card {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.dark-mode .spending-stats .stat-card {
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+}
+
+.profile-info p {
+  margin: 0.5rem 0;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.dark-mode .profile-info p {
+  border-bottom-color: #555;
+}
+
+.profile-info p:last-child {
+  border-bottom: none;
+}
+
+.role-badge {
+  background: #4CAF50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+.user-profile-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-profile-pic {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.image-preview {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.preview-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #4CAF50;
+}
+
+.image-preview p {
+  margin: 5px 0 0 0;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.dark-mode .image-preview p {
+  color: #ccc;
+}
+/* FIX 6: Profile picture size - Make it smaller */
+.profile-picture {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4CAF50;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Add to existing DashboardPage.css */
+.dashboard-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.action-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  min-height: 40px;
+}
+
+.action-btn.primary {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.action-btn.primary:hover {
+  background-color: #45a049;
+}
+
+.action-btn.secondary {
+  background-color: #2196F3;
+  color: white;
+}
+
+.action-btn.secondary:hover {
+  background-color: #1976D2;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.dark-mode .modal-content {
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dark-mode .modal-header {
+  border-bottom-color: #444;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.dark-mode .modal-header h3 {
+  color: #e0e0e0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark-mode .close-btn {
+  color: #ccc;
+}
+
+.modal-content form {
+  padding: 1.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.cancel-btn, .submit-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+.submit-btn {
+  background: #4CAF50;
+  color: white;
+}
+
+.submit-btn:hover {
+  background: #45a049;
+}
+
+.submit-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.dark-mode .cancel-btn {
+  background: #444;
+  color: #e0e0e0;
+}
+
+.dark-mode .cancel-btn:hover {
+  background: #555;
+}
+
+/* Professional Profile Page Styles */
+.profile-section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dark-mode .profile-header {
+  border-bottom-color: #444;
+}
+
+.profile-avatar-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-picture-container {
+  position: relative;
+}
+
+.profile-picture {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #4CAF50;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.profile-picture-placeholder.large {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #4CAF50;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+}
+
+.profile-role-badge {
+  margin-top: 1rem;
+}
+
+.profile-details h2 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 2rem;
+}
+
+.dark-mode .profile-details h2 {
+  color: #e0e0e0;
+}
+
+.profile-email {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.dark-mode .profile-email {
+  color: #ccc;
+}
+
+.profile-member-since {
+  color: #888;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.dark-mode .profile-member-since {
+  color: #aaa;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.dark-mode .profile-stats {
+  background: #2a2a2a;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4CAF50;
+  margin-bottom: 0.5rem;
+}
+
+.dark-mode .stat-number {
+  color: #8BC34A;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dark-mode .stat-label {
+  color: #ccc;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .profile-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .profile-actions {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+}

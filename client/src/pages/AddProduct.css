@@ -1,0 +1,237 @@
+.add-product-page {
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    padding: 2rem 0;
+  }
+
+  .dark-mode .add-product-page {
+    background-color: #121212;
+  }
+
+  .add-product-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .add-product-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  .dark-mode .add-product-container h1 {
+    color: #e0e0e0;
+  }
+
+  .add-product-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+  }
+
+  .dark-mode .add-product-form {
+    background: #2a2a2a;
+    color: #e0e0e0;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .dark-mode .form-group label {
+    color: #e0e0e0;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    background: white;
+    color: #333;
+    transition: border-color 0.3s ease;
+    line-height: 1.5;
+  }
+
+  .dark-mode .form-group input,
+  .dark-mode .form-group select,
+  .dark-mode .form-group textarea {
+    border-color: #555;
+    background: #333;
+    color: #e0e0e0;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 0.125rem rgba(76, 175, 80, 0.2);
+  }
+
+  .image-upload-section {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    border: 2px dashed #ddd;
+  }
+
+  .dark-mode .image-upload-section {
+    background: #333;
+    border-color: #555;
+  }
+
+  .image-upload-section label {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: block;
+    color: #333;
+  }
+
+  .dark-mode .image-upload-section label {
+    color: #e0e0e0;
+  }
+
+  .image-options {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .upload-option {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .upload-label {
+    background: #4CAF50;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 500;
+  }
+
+  .upload-label:hover {
+    background: #45a049;
+  }
+
+  #file-upload {
+    display: none;
+  }
+
+  .upload-note {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .dark-mode .upload-note {
+    color: #ccc;
+  }
+
+  .or-divider {
+    text-align: center;
+    color: #666;
+    font-weight: 600;
+  }
+
+  .dark-mode .or-divider {
+    color: #ccc;
+  }
+
+  .image-preview {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .image-preview img {
+    max-width: 12.5rem;
+    max-height: 9.375rem;
+    border-radius: 0.5rem;
+    border: 2px solid #4CAF50;
+  }
+
+  .image-preview p {
+    margin: 0.5rem 0 0 0;
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  .dark-mode .image-preview p {
+    color: #ccc;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    background-color: #45a049;
+  }
+
+  .submit-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .dark-mode .submit-btn:disabled {
+    background-color: #666;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .add-product-container {
+      padding: 0 1rem;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .image-options {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+    }
+
+    .or-divider {
+      order: 2;
+    }
+  }
